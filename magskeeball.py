@@ -28,7 +28,7 @@ HISCORE_COLORS = [
 class SkeeballApp():
 
     def __init__(self):
-        self.sensor = sensor.Sensor(sensor.EMULATED)
+        self.sensor = sensor.Sensor(sensor.BOTH)
         self.panel = panel.Panel(panel.REAL)
         
         self.basic_skeeball = BasicSkeeball(self.panel,self.sensor)

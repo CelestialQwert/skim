@@ -1,6 +1,7 @@
 from common import *
 import sys
 import pygame
+import struct
 
 ARDUINO = 0
 EMULATED = 1
@@ -29,6 +30,7 @@ class Sensor():
 
     def init_arduino(self):
         import serial
+        print('Hello arduino!')
         self.serial = serial.Serial(
             port='/dev/arduino',
             baudrate=9600,
@@ -42,6 +44,7 @@ class Sensor():
 
     def init_emulated_sensor(self):
         pygame.init()
+        print("Hello emulated sensors!")
         self.EMUBUTTON = {
             pygame.K_1: 'B100',
             pygame.K_2: 'B200',
@@ -64,7 +67,7 @@ class Sensor():
 
     def release_balls(self):
         if self.arduino:
-            self.serial.write("R\n")
+            self.serial.write(b"R\n")
 
     def is_pressed(self,button):
         return self.buttons & button
@@ -73,11 +76,14 @@ class Sensor():
     def update_buttons(self):
         ard_buttons = 0
         if self.arduino:
-            self.serial.write("B")
+            #print('sending command')
+            self.serial.write(bytes('B','ascii'))
+            #print('command sent')
             buttons = self.serial.read(2)
-            if buttons != None and buttons != '':
-                #print buttons.encode('hex')
-                ard_buttons = int(buttons.encode('hex'), 16)
+            #print('buttons read')
+            if buttons != None and buttons != b'':
+                ard_buttons = struct.unpack('h',buttons)[0]
+
         emu_buttons = 0
         if self.emulated_sensors:
             for event in pygame.event.get():
@@ -88,4 +94,6 @@ class Sensor():
                     button = self.EMUBUTTON[event.key]
                     emu_buttons += BUTTON[button]
         self.buttons = ard_buttons | emu_buttons
+        if self.buttons != 0:
+            print(self.buttons)
         #bitwise or on both sets of buttons
