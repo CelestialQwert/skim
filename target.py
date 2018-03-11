@@ -16,10 +16,10 @@ class Target(GameParent):
     def draw_score(self):  
         self.panel.clear()
         d = 6 if self.show_ball_scores else 0
-        self.panel.draw.text((34-d, 31), "%d" % self.balls,font=FONTS['Digital14'],fill=(0,255,50))
+        self.panel.draw.text((34-d, 31), "%d" % self.balls,font=FONTS['Digital14'],fill=BALL_COLORS[self.balls])
         self.panel.draw.text((17-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(100,0,255))
-        self.panel.draw.text((8-d,31), "BALL" ,font=FONTS['Medium'],fill=(0,255,50))
-        self.panel.draw.text((8-d,41), "LEFT" ,font=FONTS['Medium'],fill=(0,255,50))
+        self.panel.draw.text((8-d,31), "BALL" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
+        self.panel.draw.text((8-d,41), "LEFT" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
         self.panel.draw.text((52-d,31), "TARGET" ,font=FONTS['Medium'],fill=(255,255,0))
         if self.balls > 0:
             self.panel.draw.text((61-d,41), self.bonus[9-self.balls][1:] ,font=FONTS['Medium'],fill=(255,255,0))
@@ -52,6 +52,7 @@ class Target(GameParent):
         self.sensor.release_balls()
 
         #self.draw_score()
+        SOUNDS['START'].play()
 
         self.clock = timer.Timer()
         while self.balls > 0 or self.advance_score:

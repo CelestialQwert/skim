@@ -3,7 +3,15 @@ import time
 from game_parent import GameParent
 import random
 import timer
+import colorsys
 
+COMBO_COLORS = [
+    (255,255,255),
+    (50,50,255),
+    (0,255,0),
+    (255,69,0),
+    (255,0,255),
+]
 
 class Combo(GameParent):
 
@@ -17,23 +25,26 @@ class Combo(GameParent):
         self.panel.clear()
         d = 6 if self.show_ball_scores else 0
         score_x = 17 if self.score < 10000 else 4#1
-        self.panel.draw.text((score_x-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(100,0,255))
-        self.panel.draw.text((31-d, 31), "%d" % self.balls,font=FONTS['Digital14'],fill=(0,255,50))
-        self.panel.draw.text((5-d,31), "BALL" ,font=FONTS['Medium'],fill=(0,255,50))
-        self.panel.draw.text((5-d,41), "LEFT" ,font=FONTS['Medium'],fill=(0,255,50))
-        self.panel.draw.text((48-d,31), "CHAIN" ,font=FONTS['Medium'],fill=(255,255,0))
+        self.panel.draw.text((score_x-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(150,0,255))
+        self.panel.draw.text((31-d, 31), "%d" % self.balls,font=FONTS['Digital14'],fill=BALL_COLORS[self.balls])
+        self.panel.draw.text((5-d,31), "BALL" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
+        self.panel.draw.text((5-d,41), "LEFT" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
 
-        if self.ball_scores[-1] == '0':
-            self.combo = 0
+        if self.combo == 5:
+            colour = tuple(int(255*i) for i in colorsys.hsv_to_rgb((self.clock.ticks*18)%360/360,1,1))
+        else:
+            colour = COMBO_COLORS[self.combo]
+        #if self.ball_scores[-1] == '0':
+        #    self.combo = 0
         ballscore_x = 63-3*len(self.ball_scores[-1])
-        self.panel.draw.text((80-d,31), str(self.combo) ,font=FONTS['Digital14'],fill=(255,255,0))
-        self.panel.draw.text((ballscore_x-d,41),self.ball_scores[-1] ,font=FONTS['Medium'],fill=(255,255,0))
+        self.panel.draw.text((80-d,31), str(self.combo) ,font=FONTS['Digital14'],fill=colour)
+        self.panel.draw.text((ballscore_x-d,41),self.ball_scores[-1] ,font=FONTS['Medium'],fill=colour)
+        self.panel.draw.text((48-d,31), "CHAIN" ,font=FONTS['Medium'],fill=colour)
+
         if self.just_scored:
             text = '{} x {}'.format(self.ball_scores[-1],self.combo)
             self.panel.draw.text((27-d,53), text ,font=FONTS['Medium'],fill=(255,255,255))
 
-
-        
         self.panel.update()
 
     def main_loop(self,settings):
@@ -41,7 +52,7 @@ class Combo(GameParent):
         self.score_buffer = 0
         self.balls = 9
         self.ball_scores = ['0']
-        self.combo = 1
+        self.combo = 0
         self.show_ball_scores = False
         self.advance_score = False
         self.bonus_time = time.time()
@@ -52,6 +63,7 @@ class Combo(GameParent):
         self.sensor.release_balls()
 
         #self.draw_score()
+        SOUNDS['START'].play()
 
         self.clock = timer.Timer()
         while self.balls > 0 or self.advance_score:
@@ -63,6 +75,8 @@ class Combo(GameParent):
                 if self.score_buffer > 0:
                     self.score += 100
                     self.score_buffer -= 100
+                    if self.score == 9100:
+                        SOUNDS['OVER9000'].play()
                 else:
                     self.advance_score = False
 

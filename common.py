@@ -1,9 +1,12 @@
 from PIL import Image, ImageFont
+import pygame
+
+pygame.init()
 
 FPS = 20
 
 FONTS = {
-    'GameOver': ImageFont.truetype("fonts/GameCube.ttf", 16),
+    'GameOver': ImageFont.truetype("./fonts/GameCube.ttf", 16),
     'Tiny': ImageFont.load('fonts/4x6.pil'),
     'Small': ImageFont.load('fonts/5x7.pil'),
     'Medium': ImageFont.load('fonts/6x10.pil'),
@@ -31,4 +34,24 @@ BUTTON = {
     'SCORED': 0x007F,
     'ANY': 0xFFFF
 }
-   
+
+SOUNDS = {
+    'START': pygame.mixer.Sound("sounds/great_balls_of_fire.wav"),
+    'JINGLE': pygame.mixer.Sound("sounds/skeeball_jingle.ogg"),
+    'OVER9000': pygame.mixer.Sound("sounds/its_over_9000.wav"),
+    'STEEL': pygame.mixer.Sound("sounds/balls_of_steel.ogg"),
+}
+
+
+BALL_COLORS = [
+    (255,0,0),
+    (255,0,0),
+    (255,255,0),
+    (255,255,0),
+    (0,255,0),
+    (0,255,0),
+    (0,255,0),
+    (0,255,0),
+    (0,255,0),
+    (0,255,0),
+]

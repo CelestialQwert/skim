@@ -2,6 +2,7 @@ from PIL import Image, ImageFont, ImageDraw
 from common import *
 import sys
 import pygame
+import time
 
 REAL = 0
 EMULATED = 1
@@ -45,7 +46,10 @@ class Panel():
         self.options.pwm_lsb_nanoseconds = 130
         #self.options.disable_hardware_pulsing = True
         self.options.hardware_mapping = 'adafruit-hat-pwm'
+        self.no_drop_privs = True
         self.matrix = RGBMatrix(options = self.options)
+        #print('real panel loaded, waiting 5 seconds to drop root...')
+        #time.sleep(5)
 
     def init_emulated_panel(self,scale):
         pygame.init()

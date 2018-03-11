@@ -16,10 +16,10 @@ class BasicSkeeball(GameParent):
     def draw_score(self):  
         self.panel.clear()
         d = 6 if self.show_ball_scores else 0
-        self.panel.draw.text((42-d, 39), "%d" % self.balls,font=FONTS['Digital14'],fill=(0,255,50))
+        self.panel.draw.text((42-d, 39), "%d" % self.balls,font=FONTS['Digital14'],fill=BALL_COLORS[self.balls])
         self.panel.draw.text((17-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(100,0,255))
-        self.panel.draw.text((16-d,44), "BALL" ,font=FONTS['Medium'],fill=(0,255,50))
-        self.panel.draw.text((57-d,44), "LEFT" ,font=FONTS['Medium'],fill=(0,255,50))
+        self.panel.draw.text((16-d,44), "BALL" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
+        self.panel.draw.text((57-d,44), "LEFT" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
         if self.show_ball_scores:
             for i,num in enumerate(self.ball_scores):
                 t=4 if num == '1000' else 0
@@ -37,6 +37,8 @@ class BasicSkeeball(GameParent):
         self.sensor.release_balls()
 
         self.draw_score()
+
+        SOUNDS['START'].play()
 
         self.clock = timer.Timer()
         while self.balls > 0 or self.advance_score:

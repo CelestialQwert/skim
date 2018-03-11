@@ -2,6 +2,7 @@ from common import *
 import time
 import json
 from copy import copy
+import os
 
 settings_desc_text = {
     'red_game': 'RED GAME',
@@ -71,6 +72,8 @@ class ConfigMenu():
             print('json is busted, using default settings')
             with open('config.json','w') as config_json_file:
                 json.dump(self.settings,config_json_file)
+            os.chmod('config.json',0o777)
+
 
 
     def main_loop(self):

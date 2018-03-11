@@ -17,6 +17,9 @@ class GameParent():
             timestamp = time.strftime('_%Y-%m-%d_%H-%M-%S')
             archive_file = self.score_filename.split('.')[0] + timestamp + '.txt'
             shutil.move(self.score_filename,archive_file)
+        if not os.path.isdir('./high_scores'):
+            os.mkdir('./high_scores')
+            os.chmod('./high_scores',0o777)
         if not(os.path.isfile(self.score_filename)) or erase:
             with open(self.score_filename,'w') as sf:
                 sf.write('MAG,2000\nFES,1600\nTIS,1200\nADO,800\nNUT,400\n')
@@ -48,6 +51,7 @@ class GameParent():
                     sf.write('{},{}\n'.format(name,score))
 
     def get_name(self):
+        SOUNDS['STEEL'].play()
         self.your_name = ''
         self.cursor = 0
         self.base_time = time.time()
