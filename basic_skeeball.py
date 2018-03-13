@@ -93,6 +93,9 @@ class BasicSkeeball(GameParent):
 
         time.sleep(1)
 
+        if True:
+            self.show_qr_code()
+
         if settings['do_hi_scores']:
             self.check_high_score()
 

@@ -36,10 +36,13 @@ BUTTON = {
 }
 
 SOUNDS = {
-    'START': pygame.mixer.Sound("sounds/great_balls_of_fire.wav"),
+    'START': pygame.mixer.Sound("sounds/great_balls_of_fire.ogg"),
     'JINGLE': pygame.mixer.Sound("sounds/skeeball_jingle.ogg"),
-    'OVER9000': pygame.mixer.Sound("sounds/its_over_9000.wav"),
-    'STEEL': pygame.mixer.Sound("sounds/balls_of_steel.ogg"),
+    'OVER9000': pygame.mixer.Sound("sounds/its_over_9000.ogg"),
+    'PLACE1': pygame.mixer.Sound("sounds/place_1.ogg"),
+    'PLACE2': pygame.mixer.Sound("sounds/place_2.ogg"),
+    'PLACE3': pygame.mixer.Sound("sounds/place_3.ogg"),
+    'PLACE4': pygame.mixer.Sound("sounds/place_4.ogg"),
 }
 
 

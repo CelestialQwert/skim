@@ -2,6 +2,8 @@ from common import *
 import time
 import os
 import shutil
+import qrcode
+
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ._<%'
 
@@ -32,6 +34,34 @@ class GameParent():
             self.high_scores.append((name,score))
         self.score_file.close()
 
+    def show_qr_code(self):
+
+        qr = qrcode.QRCode(
+            version=6,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            box_size=1,
+            border=2,
+        )
+        qr_text = 'https://twitter.com/intent/tweet?text=I+got+{}+points+playing+Skee-Ball+at+MAGFest!'.format(self.score)
+        qr.add_data(qr_text)
+        qr.make(fit=True)
+
+        img = qr.make_image()
+
+        self.panel.clear()
+        self.panel.paste(img,(2,2))
+        self.panel.draw.text((60,2), "TWEET!",font=FONTS['Medium'],fill=(255,255,255))
+        self.panel.update()
+        
+        self.clock.ticks = 0
+        wait_ticks = 400
+        while self.clock.ticks < wait_ticks:
+            self.clock.tick(20)
+            self.sensor.update_buttons()
+            if self.sensor.is_pressed(BUTTON['ANYBUTTON']):
+                self.clock.ticks = wait_ticks
+
+
     def check_high_score(self):
         self.place = 0
         temp_hi_scores = []
@@ -51,7 +81,8 @@ class GameParent():
                     sf.write('{},{}\n'.format(name,score))
 
     def get_name(self):
-        SOUNDS['STEEL'].play()
+        if self.place < 5:
+            SOUNDS['PLACE%d' % self.place].play()
         self.your_name = ''
         self.cursor = 0
         self.base_time = time.time()
