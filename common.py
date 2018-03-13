@@ -43,6 +43,7 @@ SOUNDS = {
     'PLACE2': pygame.mixer.Sound("sounds/place_2.ogg"),
     'PLACE3': pygame.mixer.Sound("sounds/place_3.ogg"),
     'PLACE4': pygame.mixer.Sound("sounds/place_4.ogg"),
+    'PLACE5': pygame.mixer.Sound("sounds/place_5.ogg"),
 }
 
 

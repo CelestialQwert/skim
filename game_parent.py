@@ -37,10 +37,10 @@ class GameParent():
     def show_qr_code(self):
 
         qr = qrcode.QRCode(
-            version=6,
+            version=None,
             error_correction=qrcode.constants.ERROR_CORRECT_M,
             box_size=1,
-            border=2,
+            border=3,
         )
         qr_text = 'https://twitter.com/intent/tweet?text=I+got+{}+points+playing+Skee-Ball+at+MAGFest!'.format(self.score)
         qr.add_data(qr_text)
@@ -50,7 +50,10 @@ class GameParent():
 
         self.panel.clear()
         self.panel.paste(img,(2,2))
-        self.panel.draw.text((60,2), "TWEET!",font=FONTS['Medium'],fill=(255,255,255))
+        self.panel.draw.text((55,2), "TWEET",font=FONTS['Medium'],fill=(255,255,255))
+        self.panel.draw.text((57,11), "YOUR",font=FONTS['Medium'],fill=(255,255,255))
+        self.panel.draw.text((54,20), "SCORE!",font=FONTS['Medium'],fill=(255,255,255))
+        self.panel.draw.text((57,35), str(self.score),font=FONTS['Medium'],fill=(255,255,255))
         self.panel.update()
         
         self.clock.ticks = 0
@@ -81,8 +84,7 @@ class GameParent():
                     sf.write('{},{}\n'.format(name,score))
 
     def get_name(self):
-        if self.place < 5:
-            SOUNDS['PLACE%d' % self.place].play()
+        SOUNDS['PLACE%d' % self.place].play()
         self.your_name = ''
         self.cursor = 0
         self.base_time = time.time()
