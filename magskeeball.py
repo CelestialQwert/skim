@@ -4,6 +4,7 @@ import time
 import sys
 import os
 from PIL import Image, ImageFont
+import random
 
 from basic_skeeball import BasicSkeeball
 from combo import Combo
@@ -28,8 +29,8 @@ HISCORE_COLORS = [
 class SkeeballApp():
 
     def __init__(self):
-        self.sensor = sensor.Sensor(sensor.BOTH)
-        self.panel = panel.Panel(panel.REAL)
+        self.sensor = sensor.Sensor(sensor.EMULATED)
+        self.panel = panel.Panel(panel.EMULATED)
         
         self.basic_skeeball = BasicSkeeball(self.panel,self.sensor)
         self.combo = Combo(self.panel,self.sensor)
@@ -47,6 +48,7 @@ class SkeeballApp():
         self.config_menu = ConfigMenu(self.panel,self.sensor,self.game_list)
         self.settings = self.config_menu.settings
         self.do_red_hiscore = True
+        self.attract_song = MUSIC[random.choice(MUSIC_KEYS)]
 
     def main_loop(self):
         self.clock = timer.Timer()
@@ -54,30 +56,31 @@ class SkeeballApp():
         while True:
             self.clock.tick(20)
 
-            if self.clock.ticks % 200 < 100 or not(self.settings['do_hi_scores']):
+            if self.clock.ticks % 400 < 200 or not(self.settings['do_hi_scores']):
                 self.draw_attract()
             else:
-                if self.clock.ticks % 400 < 200:
+                if self.clock.ticks % 800 < 400:
                     game = self.game_dict[self.settings['red_game']]
                 else:
                     game = self.game_dict[self.settings['yellow_game']]
                 self.draw_high_scores(game)
             if self.clock.ticks%2400 == 13:
                 #play jingle once every 2 minutes if idle
-                SOUNDS['JINGLE'].play()
+                self.attract_song = MUSIC[random.choice(MUSIC_KEYS)]
+                self.attract_song.play()
             self.sensor.update_buttons()
             if self.sensor.is_pressed(BUTTON['START']):
-                SOUNDS['JINGLE'].stop()
+                self.attract_song.stop()
                 self.game_dict[self.settings['red_game']].main_loop(self.settings)
-                self.clock.ticks = 100
+                self.clock.ticks = 200
             elif self.sensor.is_pressed(BUTTON['SELECT']):
-                SOUNDS['JINGLE'].stop()
+                self.attract_song.stop()
                 self.game_dict[self.settings['yellow_game']].main_loop(self.settings)
-                self.clock.ticks = 300
-            elif self.sensor.is_pressed(BUTTON['CONFIG']):
-                SOUNDS['JINGLE'].stop()
-                self.config_menu.main_loop()
                 self.clock.ticks = 400
+            elif self.sensor.is_pressed(BUTTON['CONFIG']):
+                self.attract_song.stop()
+                self.config_menu.main_loop()
+                self.clock.ticks = 600
 
     def draw_attract(self):
         self.panel.clear()

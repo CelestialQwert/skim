@@ -37,14 +37,27 @@ BUTTON = {
 
 SOUNDS = {
     'START': pygame.mixer.Sound("sounds/great_balls_of_fire.ogg"),
-    'JINGLE': pygame.mixer.Sound("sounds/skeeball_jingle.ogg"),
     'OVER9000': pygame.mixer.Sound("sounds/its_over_9000.ogg"),
     'PLACE1': pygame.mixer.Sound("sounds/place_1.ogg"),
     'PLACE2': pygame.mixer.Sound("sounds/place_2.ogg"),
     'PLACE3': pygame.mixer.Sound("sounds/place_3.ogg"),
     'PLACE4': pygame.mixer.Sound("sounds/place_4.ogg"),
     'PLACE5': pygame.mixer.Sound("sounds/place_5.ogg"),
+    'SCORE100': pygame.mixer.Sound("sounds/sonic_ring.ogg"),
+    'SCORE200': pygame.mixer.Sound("sounds/mario_coin.ogg"),
+    'SCORE300': pygame.mixer.Sound("sounds/pac_man_wakka.ogg"),
+    'SCORE400': pygame.mixer.Sound("sounds/mega_man_item_get.ogg"),
+    'SCORE500': pygame.mixer.Sound("sounds/colossus_roar.ogg"),
+    'SCORE1000': pygame.mixer.Sound("sounds/colossus_roar.ogg"),
 }
+
+MUSIC = {
+    'BK2000': pygame.mixer.Sound("sounds/black_knight_2000.ogg"),
+    'SKEEBALL': pygame.mixer.Sound("sounds/skeeball_jingle.ogg"),
+    'SF2': pygame.mixer.Sound("sounds/street_fighter_ii.ogg"),
+}
+
+MUSIC_KEYS = list(MUSIC.keys())
 
 
 BALL_COLORS = [
