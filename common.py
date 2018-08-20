@@ -26,11 +26,11 @@ BUTTON = {
     'B300':   0x0010,
     'B200':   0x0020,
     'B100':   0x0040,
-    'BRET':   0x0080, 
-    'SELECT': 0x0400,
-    'START':  0x0200,
-    'ANYBUTTON': 0x0600,
+    'BRET':   0x0080,
     'CONFIG': 0x0100,
+    'START':  0x0200, 
+    'SELECT': 0x0400,
+    'ANYBUTTON': 0x0600,
     'SCORED': 0x007F,
     'ANY': 0xFFFF
 }
