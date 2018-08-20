@@ -26,13 +26,13 @@ class Sensor():
             self.emulated_sensors = True
             self.init_emulated_sensor()
         else:
-            self.emulated_panel = False
+            self.emulated_sensors = False
 
     def init_arduino(self):
         import serial
         print('Hello arduino!')
         self.serial = serial.Serial(
-            port='/dev/arduino',
+            port='COM3',
             baudrate=9600,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,
