@@ -13,6 +13,8 @@ class Sensor():
 
     def __init__(self,which_sensor=EMULATED):
         self.buttons = 0
+        self.buttons_held = 0
+        self.hold_time = 0*[16]
         if which_sensor not in [ARDUINO,EMULATED,BOTH]:
                 raise ValueError('Argument must be sensor.ARDUINO (0), sensor.EMULATED (1), or sensor.BOTH (2)')
 
@@ -75,16 +77,18 @@ class Sensor():
 
     def update_buttons(self):
         ard_buttons = 0
+        ard_buttons_held = 0
         if self.arduino:
-            #print('sending command')
             self.serial.write(bytes('B','ascii'))
-            #print('command sent')
             buttons = self.serial.read(2)
-            #print('buttons read')
             if buttons != None and buttons != b'':
-                ard_buttons = struct.unpack('h',buttons)[0]
+                ard_buttons = int.from_bytes(buttons,byteorder='little')
+            held_buttons = self.serial.read(2)
+            if held_buttons != None and held_buttons != b'':
+                ard_buttons_held = int.from_bytes(held_buttons,byteorder='little')
 
         emu_buttons = 0
+        emu_buttons_held = 0
         if self.emulated_sensors:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -93,7 +97,17 @@ class Sensor():
                 if event.type == pygame.KEYDOWN and event.key in self.EMUBUTTON.keys():
                     button = self.EMUBUTTON[event.key]
                     emu_buttons += BUTTON[button]
+            keys_pressed = pygame.key.get_pressed()
+            for key in self.EMUBUTTON:
+                if keys_pressed[key]:
+                    button = self.EMUBUTTON[key]
+                    emu_buttons_held += BUTTON[button]
+
+        #bitwise or on both sets of buttons
         self.buttons = ard_buttons | emu_buttons
+        self.buttons_held = ard_buttons_held | emu_buttons_held
+
         if self.buttons != 0:
             print(self.buttons)
-        #bitwise or on both sets of buttons
+        if self.buttons_held != 0:
+            print(self.buttons_held)

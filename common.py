@@ -28,8 +28,8 @@ BUTTON = {
     'B100':   0x0040,
     'BRET':   0x0080,
     'CONFIG': 0x0100,
-    'START':  0x0200, 
-    'SELECT': 0x0400,
+    'START':  0x0200, #red
+    'SELECT': 0x0400, #yellow
     'ANYBUTTON': 0x0600,
     'SCORED': 0x007F,
     'ANY': 0xFFFF
@@ -55,6 +55,7 @@ MUSIC = {
     'BK2000': pygame.mixer.Sound("sounds/black_knight_2000.ogg"),
     'SKEEBALL': pygame.mixer.Sound("sounds/skeeball_jingle.ogg"),
     'SF2': pygame.mixer.Sound("sounds/street_fighter_ii.ogg"),
+    'SANIC': pygame.mixer.Sound("sounds/sonic_title.ogg"),
 }
 
 MUSIC_KEYS = list(MUSIC.keys())
