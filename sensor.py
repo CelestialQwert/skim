@@ -2,6 +2,7 @@ from common import *
 import sys
 import pygame
 import struct
+import platform
 
 ARDUINO = 0
 EMULATED = 1
@@ -32,9 +33,13 @@ class Sensor():
 
     def init_arduino(self):
         import serial
+        if platform.system() == 'Windows':
+            port = 'COM3'
+        else:
+            port = '/dev/arduino'
         print('Hello arduino!')
         self.serial = serial.Serial(
-            port='COM3',
+            port=port,
             baudrate=9600,
             parity=serial.PARITY_NONE,
             stopbits=serial.STOPBITS_ONE,

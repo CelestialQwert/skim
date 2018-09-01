@@ -19,4 +19,5 @@ class Dummy(GameParent):
 
         self.sensor.update_buttons()
         while not self.sensor.is_pressed(BUTTON['START']):
+            self.timer.tick(20)
             self.sensor.update_buttons()

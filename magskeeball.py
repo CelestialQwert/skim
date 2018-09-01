@@ -10,6 +10,7 @@ from basic_skeeball import BasicSkeeball
 from combo import Combo
 from target import Target
 from dummy import Dummy
+from cricket import Cricket
 from config_menu import ConfigMenu
 from common import *
 import panel
@@ -29,18 +30,20 @@ HISCORE_COLORS = [
 class SkeeballApp():
 
     def __init__(self):
-        self.sensor = sensor.Sensor(sensor.BOTH)
+        self.sensor = sensor.Sensor(sensor.EMULATED)
         self.panel = panel.Panel(panel.EMULATED)
         
         self.basic_skeeball = BasicSkeeball(self.panel,self.sensor)
         self.combo = Combo(self.panel,self.sensor)
         self.target = Target(self.panel,self.sensor)
         self.dummy = Dummy(self.panel,self.sensor)
+        self.cricket = Cricket(self.panel,self.sensor)
         self.game_list = [
             self.basic_skeeball,
             self.combo,
             self.target,
             self.dummy,
+            self.cricket,
         ]
         self.game_dict = {g.name: g for g in self.game_list}
         
