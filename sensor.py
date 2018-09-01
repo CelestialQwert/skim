@@ -36,7 +36,7 @@ class Sensor():
         if platform.system() == 'Windows':
             port = 'COM3'
         else:
-            port = '/dev/arduino'
+            port = '/dev/ttyACM0'
         print('Hello arduino!')
         self.serial = serial.Serial(
             port=port,
@@ -112,7 +112,5 @@ class Sensor():
         self.buttons = ard_buttons | emu_buttons
         self.buttons_held = ard_buttons_held | emu_buttons_held
 
-        if self.buttons != 0:
-            print(self.buttons)
-        if self.buttons_held != 0:
-            print(self.buttons_held)
+        if self.buttons != 0 or self.buttons_held != 0:
+            print(self.buttons,self.buttons_held)
