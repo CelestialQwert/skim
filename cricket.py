@@ -14,13 +14,13 @@ class Cricket(GameParent):
 
     def main_loop(self,settings):
 
-        self.draw_cricket()
+        self.draw_cricket_demo()
 
         self.sensor.update_buttons()
         while not self.sensor.is_pressed(BUTTON['ANYBUTTON']):
             self.sensor.update_buttons()
 
-    def draw_cricket(self):
+    def draw_cricket_demo(self):
         self.panel.clear()
 
         self.panel.draw.text((3,2), "P1",font=FONTS['Medium'],fill=COLORS.GREEN)

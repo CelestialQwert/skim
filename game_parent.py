@@ -115,6 +115,7 @@ class GameParent():
 
     def draw_game_over(self):
         self.panel.clear()
+        self.panel.draw.text((0,0), self.name ,font=FONTS['Tiny'],fill=COLORS.GREEN)
         self.panel.draw.text((8, 26), "GAME",font=FONTS['GameOver'],fill=COLORS.RED)
         self.panel.draw.text((25, 39), "OVER",font=FONTS['GameOver'],fill=COLORS.RED)
         score_x = 17 if self.score < 10000 else 4
