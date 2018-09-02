@@ -40,7 +40,8 @@ class GameParent():
         self.sensor.release_balls()
 
         self.draw_score()
-        SOUNDS['START'].play()
+        self.start_song = START_MUSIC[random.choice(START_MUSIC_KEYS)]
+        self.start_song.play()
 
         self.clock = timer.Timer()
 

@@ -52,7 +52,7 @@ class SkeeballApp():
         self.config_menu = ConfigMenu(self.panel,self.sensor,self.game_list)
         self.settings = self.config_menu.settings
         self.do_red_hiscore = True
-        self.attract_song = MUSIC[random.choice(MUSIC_KEYS)]
+        self.attract_song = ATTRACT_MUSIC[random.choice(ATTRACT_MUSIC_KEYS)]
 
     def main_loop(self):
         self.clock = timer.Timer()
@@ -70,7 +70,7 @@ class SkeeballApp():
                 self.draw_high_scores(game)
             if self.clock.ticks%2400 == 13:
                 #play jingle once every 2 minutes if idle
-                self.attract_song = MUSIC[random.choice(MUSIC_KEYS)]
+                self.attract_song = ATTRACT_MUSIC[random.choice(ATTRACT_MUSIC_KEYS)]
                 self.attract_song.play()
             self.sensor.update_buttons()
             if self.sensor.is_pressed(BUTTON['START']):

@@ -37,7 +37,6 @@ BUTTON = {
 }
 
 SOUNDS = {
-    'START': pygame.mixer.Sound("sounds/great_balls_of_fire.ogg"),
     'OVER9000': pygame.mixer.Sound("sounds/its_over_9000.ogg"),
     'PLACE1': pygame.mixer.Sound("sounds/place_1.ogg"),
     'PLACE2': pygame.mixer.Sound("sounds/place_2.ogg"),
@@ -52,14 +51,20 @@ SOUNDS = {
     'SCORE1000': pygame.mixer.Sound("sounds/colossus_roar.ogg"),
 }
 
-MUSIC = {
+ATTRACT_MUSIC = {
     'BK2000': pygame.mixer.Sound("sounds/black_knight_2000.ogg"),
     'SKEEBALL': pygame.mixer.Sound("sounds/skeeball_jingle.ogg"),
     'SF2': pygame.mixer.Sound("sounds/street_fighter_ii.ogg"),
     'SANIC': pygame.mixer.Sound("sounds/sonic_title.ogg"),
 }
 
-MUSIC_KEYS = list(MUSIC.keys())
+START_MUSIC = {
+    'FIRE': pygame.mixer.Sound("sounds/great_balls_of_fire.ogg"),
+    'WRECKING': pygame.mixer.Sound("sounds/wrecking_ball.ogg"),
+}
+
+ATTRACT_MUSIC_KEYS = list(ATTRACT_MUSIC.keys())
+START_MUSIC_KEYS = list(START_MUSIC.keys())
 
 class COLORS:
     RED = (255,0,0)
