@@ -25,7 +25,7 @@ class BasicSkeeball(GameParent):
             if self.balls == 0:
                 continue
             
-            self.detect_balls()
+            self.resolve_balls(self.detect_balls())
 
 
         self.post_game()

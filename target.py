@@ -58,15 +58,21 @@ class Target(GameParent):
             if self.balls == 0:
                 continue           
 
-            self.detect_balls()
+            hit = self.detect_balls()
 
-            if self.sensor.is_pressed(BUTTON['SCORED']):
+            if hit:
+                self.ball_scores.append(hit)
+                self.balls-=1
+                self.advance_score = True
+                if self.balls in [3,6]:
+                    self.sensor.release_balls()
+                self.clock.ticks = 0
                 if self.ball_scores[-1] == self.bonus[8-self.balls]:
                     self.score_buffer += 1000
-                    self.score_buffer -= self.bonus[8-self.balls]
                     self.got_bonus = 'yes'
                     self.ball_bonuses.append(True)
                 else:
+                    self.score_buffer += hit
                     self.got_bonus = 'no'
                     self.ball_bonuses.append(False)
 

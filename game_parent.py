@@ -60,40 +60,42 @@ class GameParent():
     def detect_balls(self):
         self.sensor.update_buttons()
 
+        hit = False
+
         if self.sensor.is_pressed(BUTTON['B1000L']) or self.sensor.is_pressed(BUTTON['B1000R']):
-            self.score_buffer += 1000
-            self.ball_scores.append(1000)
+            hit = 1000
             SOUNDS['SCORE1000'].play()
         if self.sensor.is_pressed(BUTTON['B500']):
-            self.score_buffer += 500
-            self.ball_scores.append(500)
+            hit = 500
             SOUNDS['SCORE500'].play()
         if self.sensor.is_pressed(BUTTON['B400']):
-            self.score_buffer += 400
-            self.ball_scores.append(400)
+            hit = 400
             SOUNDS['SCORE400'].play()
         if self.sensor.is_pressed(BUTTON['B300']):
-            self.score_buffer += 300
-            self.ball_scores.append(300)
+            hit = 300
             SOUNDS['SCORE300'].play()
         if self.sensor.is_pressed(BUTTON['B200']):
-            self.score_buffer += 200
-            self.ball_scores.append(200)
+            hit = 200
             SOUNDS['SCORE200'].play()
         if self.sensor.is_pressed(BUTTON['B100']):
-            self.score_buffer += 100
-            self.ball_scores.append(100)
+            hit = 100
             SOUNDS['SCORE100'].play()
 
-        if self.sensor.is_pressed(BUTTON['SCORED']):
+        if self.sensor.is_pressed(BUTTON['SELECT']):
+            self.sensor.release_balls()
+
+        return hit
+
+    def resolve_balls(self,hit):
+        if hit:
+            self.score_buffer += hit
+            self.ball_scores.append(hit)
             self.balls-=1
             self.advance_score = True
             if self.balls in [3,6]:
                 self.sensor.release_balls()
             self.clock.ticks = 0
 
-        if self.sensor.is_pressed(BUTTON['SELECT']):
-            self.sensor.release_balls()
 
     def post_game(self):
         time.sleep(1)
