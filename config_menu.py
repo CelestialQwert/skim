@@ -102,7 +102,7 @@ class ConfigMenu():
             for game in self.game_list:
                 game.load_hi_scores(erase=True)
             self.settings['erase_hi_scores'] = False
-            self.panel.draw.text((50,15+8*n), 'ERASED!',font=FONTS['Small'],fill=(255,0,0))
+            self.panel.draw.text((50,15+8*n), 'ERASED!',font=FONTS['Small'],fill=COLORS.RED)
             self.panel.update()
             time.sleep(1.5)
 
@@ -112,7 +112,7 @@ class ConfigMenu():
 
     def display(self):
         self.panel.clear()
-        self.panel.draw.text((8,1), 'SKEE-BALL CONFIG',font=FONTS['Small'],fill=(255,255,255))
+        self.panel.draw.text((8,1), 'SKEE-BALL CONFIG',font=FONTS['Small'],fill=COLORS.WHITE)
 
         for i,key in enumerate(k):
             if settings_type[key] == 'boolean':
@@ -120,12 +120,12 @@ class ConfigMenu():
             else:
                 setting_text = 'NONE' if self.settings[key] == 9999 else str(self.settings[key])
             alltext = '{}: {}'.format(settings_desc_text[key],setting_text)
-            self.panel.draw.text((6,12+8*i), alltext,font=FONTS['Small'],fill=(255,255,255))
+            self.panel.draw.text((6,12+8*i), alltext,font=FONTS['Small'],fill=COLORS.WHITE)
 
-        self.panel.draw.text((6,15+8*n), 'EXIT',font=FONTS['Small'],fill=(255,255,255))
+        self.panel.draw.text((6,15+8*n), 'EXIT',font=FONTS['Small'],fill=COLORS.WHITE)
 
         y = 15+8*self.cur_loc if self.cur_loc == n else 12+8*self.cur_loc
-        self.panel.draw.text((0,y), '>',font=FONTS['Small'],fill=(255,255,255))
+        self.panel.draw.text((0,y), '>',font=FONTS['Small'],fill=COLORS.WHITE)
 
         self.panel.update()
         

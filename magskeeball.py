@@ -19,11 +19,11 @@ import timer
 
 
 HISCORE_COLORS = [
-    (50,50,255),
-    (255,0,0),
-    (255,255,0),
-    (0,255,0),
-    (255,150,150)
+    COLORS.BLUE,
+    COLORS.RED,
+    COLORS.YELLOW,
+    COLORS.GREEN,
+    COLORS.PINK,
 ]
 
 #test line change!
@@ -80,24 +80,24 @@ class SkeeballApp():
             elif self.sensor.is_pressed(BUTTON['SELECT']):
                 self.attract_song.stop()
                 self.game_dict[self.settings['yellow_game']].main_loop(self.settings)
-                self.clock.ticks = 400
+                self.clock.ticks = 600
             elif self.sensor.is_pressed(BUTTON['CONFIG']):
                 self.attract_song.stop()
                 self.config_menu.main_loop()
-                self.clock.ticks = 600
+                self.clock.ticks = 0
 
     def draw_attract(self):
         self.panel.clear()
         self.panel.paste(IMAGES['MainLogo'],(0,5))
         if self.clock.ticks % 40 < 30:
-            self.panel.draw.text((15,54), "PRESS START",font=FONTS['Medium'],fill=(255,255,255))
+            self.panel.draw.text((15,54), "PRESS START",font=FONTS['Medium'],fill=COLORS.WHITE)
         self.panel.update()
 
     def draw_high_scores(self,game):
         self.panel.clear()
         title_text = 'HI SCORES - {}'.format(game.name)
         x = int(48-len(title_text)*2.5)+1
-        self.panel.draw.text((x,2),title_text,font=FONTS['Small'],fill=(255,255,255))
+        self.panel.draw.text((x,2),title_text,font=FONTS['Small'],fill=COLORS.WHITE)
         (name,score) = game.high_scores[0]
 
         for i,(name,score) in enumerate(game.high_scores):
@@ -112,7 +112,7 @@ class SkeeballApp():
         #     self.panel.draw.text((28,i*8+12),'{} {}'.format(name,score),font=FONTS['Small'],fill=HISCORE_COLORS[i])
 
         if self.clock.ticks % 40 < 30:
-            self.panel.draw.text((15,54), "PRESS START",font=FONTS['Medium'],fill=(255,255,255))
+            self.panel.draw.text((15,54), "PRESS START",font=FONTS['Medium'],fill=COLORS.WHITE)
         self.panel.update()
         #self.do_red_hiscore = not(self.do_red_hiscore)
     

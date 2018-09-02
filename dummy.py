@@ -13,11 +13,10 @@ class Dummy(GameParent):
 
     def main_loop(self,settings):
         self.panel.clear()
-        self.panel.draw.text((1,0), 'GAME NOT MADE',font=FONTS['Medium'],fill=(255,255,255))
-        self.panel.draw.text((1,9), 'RED TO QUIT',font=FONTS['Medium'],fill=(255,255,255))
+        self.panel.draw.text((1,0), 'GAME NOT MADE',font=FONTS['Medium'],fill=COLORS.WHITE)
+        self.panel.draw.text((1,9), 'RED TO QUIT',font=FONTS['Medium'],fill=COLORS.WHITE)
         self.panel.update()
 
         self.sensor.update_buttons()
         while not self.sensor.is_pressed(BUTTON['START']):
-            self.timer.tick(20)
             self.sensor.update_buttons()

@@ -1,12 +1,13 @@
 from PIL import Image, ImageFont
 import pygame
+from enum import Enum
 
 pygame.init()
 
 FPS = 20
 
 FONTS = {
-    'GameOver': ImageFont.truetype("./fonts/GameCube.ttf", 16),
+    'GameOver': ImageFont.truetype("./fonts/GameCube.ttf", 14),
     'Tiny': ImageFont.load('fonts/4x6.pil'),
     'Small': ImageFont.load('fonts/5x7.pil'),
     'Medium': ImageFont.load('fonts/6x10.pil'),
@@ -60,16 +61,27 @@ MUSIC = {
 
 MUSIC_KEYS = list(MUSIC.keys())
 
+class COLORS:
+    RED = (255,0,0)
+    YELLOW = (255,255,0)
+    GREEN = (0,255,0)
+    BLUE = (50,50,255)
+    MAGENTA = (255,0,255)
+    PINK = (255,150,150)
+    WHITE = (255,255,255)
+    CYAN = (0,255,255)
+    PURPLE = (100,0,255)
+    ORANGE = (255,69,0)
 
 BALL_COLORS = [
-    (255,0,0),
-    (255,0,0),
-    (255,255,0),
-    (255,255,0),
-    (0,255,0),
-    (0,255,0),
-    (0,255,0),
-    (0,255,0),
-    (0,255,0),
-    (0,255,0),
+    COLORS.RED,
+    COLORS.RED,
+    COLORS.YELLOW,
+    COLORS.YELLOW,
+    COLORS.GREEN,
+    COLORS.GREEN,
+    COLORS.GREEN,
+    COLORS.GREEN,
+    COLORS.GREEN,
+    COLORS.GREEN,
 ]

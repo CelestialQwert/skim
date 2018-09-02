@@ -6,11 +6,11 @@ import timer
 import colorsys
 
 COMBO_COLORS = [
-    (255,255,255),
-    (50,50,255),
-    (0,255,0),
-    (255,69,0),
-    (255,0,255),
+    COLORS.WHITE,
+    COLORS.BLUE,
+    COLORS.GREEN,
+    COLORS.ORANGE,
+    COLORS.MAGENTA,
 ]
 
 class Combo(GameParent):
@@ -25,7 +25,7 @@ class Combo(GameParent):
         self.panel.clear()
         d = 6 if self.show_ball_scores else 0
         score_x = 17 if self.score < 10000 else 4#1
-        self.panel.draw.text((score_x-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(150,0,255))
+        self.panel.draw.text((score_x-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=COLORS.PURPLE)
         self.panel.draw.text((31-d, 31), "%d" % self.balls,font=FONTS['Digital14'],fill=BALL_COLORS[self.balls])
         self.panel.draw.text((5-d,31), "BALL" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
         self.panel.draw.text((5-d,41), "LEFT" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
@@ -43,7 +43,7 @@ class Combo(GameParent):
 
         if self.just_scored:
             text = '{} x {}'.format(self.ball_scores[-1],self.combo)
-            self.panel.draw.text((27-d,53), text ,font=FONTS['Medium'],fill=(255,255,255))
+            self.panel.draw.text((27-d,53), text ,font=FONTS['Medium'],fill=COLORS.WHITE)
 
         self.panel.update()
 

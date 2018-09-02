@@ -19,13 +19,13 @@ class GameParent():
         self.panel.clear()
         d = 6 if self.show_ball_scores else 0
         self.panel.draw.text((42-d, 39), "%d" % self.balls,font=FONTS['Digital14'],fill=BALL_COLORS[self.balls])
-        self.panel.draw.text((17-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(100,0,255))
+        self.panel.draw.text((17-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=COLORS.PURPLE)
         self.panel.draw.text((16-d,44), "BALL" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
         self.panel.draw.text((57-d,44), "LEFT" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
         if self.show_ball_scores:
             for i,num in enumerate(self.ball_scores):
                 t=4 if num == '1000' else 0
-                self.panel.draw.text((84-t,1+6*i),num,font=FONTS['Tiny'],fill=(255,0,0))
+                self.panel.draw.text((84-t,1+6*i),num,font=FONTS['Tiny'],fill=COLORS.RED)
         self.panel.update()
 
     def start_prep(self,settings):
@@ -103,21 +103,25 @@ class GameParent():
 
         if self.settings['do_hi_scores']:
             self.check_high_score()
-
-
-        self.panel.clear()
-        self.panel.draw.text((8, 27), "GAME",font=FONTS['GameOver'],fill=(255,0,0))
-        self.panel.draw.text((14, 41), "OVER",font=FONTS['GameOver'],fill=(255,0,0))
-        self.panel.draw.text((17, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(255,200,10))
-        self.panel.update()
         
         self.clock.ticks = 0
-        wait_ticks = 100 if self.settings['do_hi_scores'] else 200
+        wait_ticks = 600 if self.settings['do_hi_scores'] else 600
         while self.clock.ticks < wait_ticks:
             self.clock.tick(20)
+            self.draw_game_over()
             self.sensor.update_buttons()
             if self.sensor.is_pressed(BUTTON['ANYBUTTON']):
                 self.clock.ticks = wait_ticks
+
+    def draw_game_over(self):
+        self.panel.clear()
+        self.panel.draw.text((8, 26), "GAME",font=FONTS['GameOver'],fill=COLORS.RED)
+        self.panel.draw.text((25, 39), "OVER",font=FONTS['GameOver'],fill=COLORS.RED)
+        score_x = 17 if self.score < 10000 else 4
+        self.panel.draw.text((score_x, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=COLORS.YELLOW)
+        if self.clock.ticks % 40 < 30:
+            self.panel.draw.text((15,54), "PRESS START",font=FONTS['Medium'],fill=COLORS.WHITE)
+        self.panel.update()
         
     def load_hi_scores(self,erase=False):
         if erase:
@@ -155,10 +159,10 @@ class GameParent():
 
         self.panel.clear()
         self.panel.paste(img,(2,2))
-        self.panel.draw.text((55,2), "TWEET",font=FONTS['Medium'],fill=(255,255,255))
-        self.panel.draw.text((57,11), "YOUR",font=FONTS['Medium'],fill=(255,255,255))
-        self.panel.draw.text((54,20), "SCORE!",font=FONTS['Medium'],fill=(255,255,255))
-        self.panel.draw.text((57,35), str(self.score),font=FONTS['Medium'],fill=(255,255,255))
+        self.panel.draw.text((55,2), "TWEET",font=FONTS['Medium'],fill=COLORS.WHITE)
+        self.panel.draw.text((57,11), "YOUR",font=FONTS['Medium'],fill=COLORS.WHITE)
+        self.panel.draw.text((54,20), "SCORE!",font=FONTS['Medium'],fill=COLORS.WHITE)
+        self.panel.draw.text((57,35), str(self.score),font=FONTS['Medium'],fill=COLORS.WHITE)
         self.panel.update()
         
         self.clock.ticks = 0
@@ -238,22 +242,22 @@ class GameParent():
 
     def draw_high_score(self):  
         self.panel.clear()
-        score_x = 17 if self.score < 10000 else 4#1
-        self.panel.draw.text((score_x, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=(100,0,255))
-        self.panel.draw.text((16,30), "HIGH SCORE!" ,font=FONTS['Medium'],fill=(255,255,50))
+        score_x = 17 if self.score < 10000 else 4
+        self.panel.draw.text((score_x, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=COLORS.PURPLE)
+        self.panel.draw.text((16,30), "HIGH SCORE!" ,font=FONTS['Medium'],fill=COLORS.YELLOW)
         #each line is shown for 3/2 (1.5) seconds
         deltime = int((time.time() - self.base_time)*2/3)
         if deltime%3 == 0:
-            self.panel.draw.text((7,40), "ENTER INITIALS" ,font=FONTS['Medium'],fill=(255,255,50))
+            self.panel.draw.text((7,40), "ENTER INITIALS" ,font=FONTS['Medium'],fill=COLORS.YELLOW)
         if deltime%3 == 1:
-            self.panel.draw.text((4,40), "YELLOW = CHANGE" ,font=FONTS['Medium'],fill=(255,255,50))
+            self.panel.draw.text((4,40), "YELLOW = CHANGE" ,font=FONTS['Medium'],fill=COLORS.YELLOW)
         if deltime%3 == 2:
-            self.panel.draw.text((19,40), "RED = PICK" ,font=FONTS['Medium'],fill=(255,255,50))
-        self.panel.draw.text((39,50), self.your_name ,font=FONTS['Medium'],fill=(255,255,255))
+            self.panel.draw.text((19,40), "RED = PICK" ,font=FONTS['Medium'],fill=COLORS.YELLOW)
+        self.panel.draw.text((39,50), self.your_name ,font=FONTS['Medium'],fill=COLORS.WHITE)
         if int(time.time()*8)%4 != 0:
             #blink current letter
-            self.panel.draw.text((39+6*len(self.your_name),50), self.curr_letter ,font=FONTS['Medium'],fill=(255,255,255))
-        self.panel.draw.text((19,50), "#%d" % self.place,font=FONTS['Medium'],fill=(255,255,255))
+            self.panel.draw.text((39+6*len(self.your_name),50), self.curr_letter ,font=FONTS['Medium'],fill=COLORS.WHITE)
+        self.panel.draw.text((19,50), "#%d" % self.place,font=FONTS['Medium'],fill=COLORS.WHITE)
 
         self.panel.update()
 
