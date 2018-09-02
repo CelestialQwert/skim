@@ -61,6 +61,7 @@ ATTRACT_MUSIC = {
 START_MUSIC = {
     'FIRE': pygame.mixer.Sound("sounds/great_balls_of_fire.ogg"),
     'WRECKING': pygame.mixer.Sound("sounds/wrecking_ball.ogg"),
+    'STEEL': pygame.mixer.Sound("sounds/balls_of_steel.ogg"),
 }
 
 ATTRACT_MUSIC_KEYS = list(ATTRACT_MUSIC.keys())

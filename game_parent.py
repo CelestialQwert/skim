@@ -2,6 +2,7 @@ from common import *
 import time
 import os
 import shutil
+import random
 import qrcode
 import timer
 
