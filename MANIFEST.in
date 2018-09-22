@@ -1,0 +1,3 @@
+recursive-include magskeeball/fonts *
+recursive-include magskeeball/imgs *
+recursive-include magskeeball/sounds *

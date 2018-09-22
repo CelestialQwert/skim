@@ -92,5 +92,7 @@ ENV/
 *.sublime-workspace
 
 #skeeball stuff
-config.json
-high_scores/*.txt
+*config.json
+*/high_scores/*.txt
+skeeballenv/
+skeeball-env/

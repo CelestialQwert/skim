@@ -2,6 +2,7 @@ from PIL import Image, ImageFont, ImageDraw
 from common import *
 import sys
 import pygame
+import platform
 import time
 
 REAL = 0
@@ -11,6 +12,9 @@ BOTH = 2
 class Panel():
 
     def __init__(self,which_panel=REAL,scale=6):
+        #if Windows is detected, force emulated panel only
+        if platform.system() == 'Windows':
+            which_panel = EMULATED
         if which_panel not in [REAL,EMULATED,BOTH]:
                 raise ValueError('Argument must be panel.REAL (0), panel.EMULATED (1), or panel.BOTH (2)')
         if which_panel != REAL:

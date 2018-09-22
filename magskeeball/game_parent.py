@@ -3,11 +3,12 @@ import time
 import os
 import shutil
 import random
-import qrcode
 import timer
 
+#GameParent is pretty much Basic mode
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ._<%'
+DOINGHIGHSCORE = True
 
 class GameParent():
 
@@ -15,6 +16,20 @@ class GameParent():
         self.panel = panel
         self.sensor = sensor
         self.load_hi_scores()
+        self.name = 'GAMEPARENT'
+
+    def main_loop(self,settings):
+
+        self.start_prep(settings)
+
+        while self.balls > 0 or self.advance_score:
+            self.clock.tick(20)
+            self.loop_part1()
+            if self.balls == 0:
+                continue
+            self.resolve_balls(self.detect_balls())
+
+        self.post_game()
 
     def draw_score(self):  
         self.panel.clear()
@@ -149,6 +164,7 @@ class GameParent():
         self.score_file.close()
 
     def show_qr_code(self):
+        import qrcode
 
         qr = qrcode.QRCode(
             version=None,
