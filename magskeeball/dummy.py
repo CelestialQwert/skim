@@ -1,6 +1,6 @@
-from common import *
+from .common import *
+from .game_parent import GameParent
 import time
-from game_parent import GameParent
 
 
 class Dummy(GameParent):

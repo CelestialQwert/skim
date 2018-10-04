@@ -1,9 +1,10 @@
-from common import *
-import time
-from game_parent import GameParent
-import random
-import timer
+from .common import *
+from .game_parent import GameParent
+from . import timer
 import colorsys
+import time
+import random
+
 
 COMBO_COLORS = [
     COLORS.WHITE,

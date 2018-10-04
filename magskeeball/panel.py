@@ -1,5 +1,5 @@
+from .common import *
 from PIL import Image, ImageFont, ImageDraw
-from common import *
 import sys
 import pygame
 import platform

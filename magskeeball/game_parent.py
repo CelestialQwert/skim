@@ -1,9 +1,9 @@
-from common import *
+from .common import *
+from . import timer
 import time
 import os
 import shutil
 import random
-import timer
 
 #GameParent is pretty much Basic mode
 

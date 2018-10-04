@@ -1,8 +1,8 @@
-from common import *
+from .common import *
+from .game_parent import GameParent
+from . import timer
 import time
-from game_parent import GameParent
 import random
-import timer
 
 DOINGHIGHSCORE = True
 

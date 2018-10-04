@@ -1,7 +1,7 @@
-from common import *
+from .common import *
+from .game_parent import GameParent
+from . import timer
 import time
-from game_parent import GameParent
-import timer
 
 COLOR_MATRIX = [COLORS.BLUE,COLORS.RED]
 COLOR_PLAYER = [COLORS.GREEN,COLORS.MAGENTA]

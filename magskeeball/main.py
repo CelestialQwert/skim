@@ -6,16 +6,16 @@ import os
 from PIL import Image, ImageFont
 import random
 
-from basic_skeeball import BasicSkeeball
-from combo import Combo
-from target import Target
-from dummy import Dummy
-from cricket import Cricket
-from config_menu import ConfigMenu
-from common import *
-import panel
-import sensor
-import timer
+from .basic_skeeball import BasicSkeeball
+from .combo import Combo
+from .target import Target
+from .dummy import Dummy
+from .cricket import Cricket
+from .config_menu import ConfigMenu
+from .common import *
+from . import panel
+from . import sensor
+from . import timer
 
 
 HISCORE_COLORS = [

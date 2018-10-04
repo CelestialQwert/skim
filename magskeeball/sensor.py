@@ -1,4 +1,5 @@
-from common import *
+from .common import *
+from pkg_resources import resource_filename
 import sys
 import pygame
 import struct
@@ -89,7 +90,7 @@ class Sensor():
             pygame.K_TAB: 'CONFIG'
         }
         self.button_panel = pygame.display.set_mode((320,240))
-        font = pygame.font.Font('fonts/DroidSans.ttf',16)
+        font = pygame.font.Font(resource_filename('magskeeball','fonts/DroidSans.ttf'),16)
         text = font.render('Click here to capture keyboard presses', True, (255,255,255))
         self.button_panel.blit(text,(5,5))
         pygame.display.update()
