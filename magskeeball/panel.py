@@ -11,7 +11,25 @@ BOTH = 2
 
 class Panel():
 
-    def __init__(self,which_panel=REAL,scale=6):
+    def __init__(self,scale=6):
+
+        if platform.system() != 'Windows':
+            self.init_real_panel()
+            self.buffer_canvas = Image.new('RGBA',(192,32))
+            self.real_panel = True
+            self.emulated_panel = False
+            print('Hello LED panel!')
+        else:
+            self.init_emulated_panel(scale)
+            self.real_panel = False
+            self.emulated_panel = True
+            print("Hello emulated panel!")
+
+        self.canvas = Image.new('RGBA',(96,64))
+        self.draw = ImageDraw.Draw(self.canvas)
+        self.paste = self.canvas.paste
+
+    def old_init(self,which_panel=REAL,scale=6):
         #if Windows is detected, force emulated panel only
         if platform.system() == 'Windows':
             which_panel = EMULATED
@@ -28,9 +46,6 @@ class Panel():
             self.init_real_panel()
         else:
             self.real_panel = False
-
-        
-
 
         self.buffer_canvas = Image.new('RGBA',(192,32))
         self.canvas = Image.new('RGBA',(96,64))
