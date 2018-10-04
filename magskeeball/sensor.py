@@ -16,6 +16,30 @@ class Sensor():
         self.buttons = 0
         self.buttons_held = 0
         self.hold_time = 0*[16]
+
+        try:
+            self.init_arduino()
+            self.arduino = True
+            print('Hello arduino!')
+        except:
+            print('Setup of Arduino FAILED')
+            self.arduino = False
+
+
+        if platform.system() == 'Windows':
+            self.init_emulated_sensor()
+            self.emulated_sensors = True
+            print('Hello emulated sensors!')
+        else:
+            self.emulated_sensors = False
+
+        if not(self.arduino) and not(self.emulated_sensors):
+            raise RuntimeError('No sensors are setup properly!')
+
+    def old_init(self,which_sensor=EMULATED):
+        self.buttons = 0
+        self.buttons_held = 0
+        self.hold_time = 0*[16]
         if which_sensor not in [ARDUINO,EMULATED,BOTH]:
                 raise ValueError('Argument must be sensor.ARDUINO (0), sensor.EMULATED (1), or sensor.BOTH (2)')
 
@@ -51,7 +75,6 @@ class Sensor():
 
     def init_emulated_sensor(self):
         pygame.init()
-        print("Hello emulated sensors!")
         self.EMUBUTTON = {
             pygame.K_1: 'B100',
             pygame.K_2: 'B200',
