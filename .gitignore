@@ -93,6 +93,6 @@ ENV/
 
 #skeeball stuff
 *config.json
-*/high_scores/*.txt
+high_scores/
 skeeballenv/
 skeeball-env/
