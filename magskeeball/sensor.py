@@ -1,15 +1,18 @@
 from .common import *
+from .findserial import find_serial_ports
 from pkg_resources import resource_filename
 import sys
 import pygame
 import struct
 import platform
+import serial
 
 ARDUINO = 0
 EMULATED = 1
 BOTH = 2
 
 #pygame.init()
+
 
 class Sensor():
 
@@ -57,21 +60,16 @@ class Sensor():
             self.emulated_sensors = False
 
     def init_arduino(self):
-        import serial
-        if platform.system() == 'Windows':
-            port = 'COM3'
-        else:
-            port = '/dev/ttyACM0'
-        print('Hello arduino!')
+        ports = find_serial_ports()
+        if len(ports) > 1:
+            print('Found mroe than one port...')
+        port = ports[0]
+        print("Using port {}".format(port))
+
         self.serial = serial.Serial(
             port=port,
             baudrate=9600,
-            parity=serial.PARITY_NONE,
-            stopbits=serial.STOPBITS_ONE,
-            bytesize=serial.EIGHTBITS,
-            timeout=.1,
-            rtscts=False,
-            dsrdtr=False
+            timeout=.1
         )
 
     def init_emulated_sensor(self):
@@ -109,10 +107,10 @@ class Sensor():
         ard_buttons_held = 0
         if self.arduino:
             self.serial.write(bytes('B','ascii'))
-            buttons = self.serial.read(2)
+            buttons = self.serial.read(4)
             if buttons != None and buttons != b'':
                 ard_buttons = int.from_bytes(buttons,byteorder='little')
-            held_buttons = self.serial.read(2)
+            held_buttons = self.serial.read(4)
             if held_buttons != None and held_buttons != b'':
                 ard_buttons_held = int.from_bytes(held_buttons,byteorder='little')
 
@@ -137,4 +135,4 @@ class Sensor():
         self.buttons_held = ard_buttons_held | emu_buttons_held
 
         if self.buttons != 0 or self.buttons_held != 0:
-            print(self.buttons,self.buttons_held)
+            print('{0:04x}'.format(self.buttons),'{0:04x}'.format(self.buttons_held))

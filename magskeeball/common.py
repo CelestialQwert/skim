@@ -39,6 +39,23 @@ BUTTON = {
     'ANY': 0xFFFF
 }
 
+BUTTON = { 
+    'B1000L': 0x0004,
+    'B1000R': 0x0008,
+    'B500':   0x0010,
+    'B400':   0x0020,
+    'B300':   0x0040,
+    'B200':   0x0080,
+    'B100':   0x0100,
+    'BRET':   0x0200,
+    'CONFIG': 0x0400,
+    'START':  0x0800, #red
+    'SELECT': 0x1000, #yellow
+    'ANYBUTTON': 0x0C00,
+    'SCORED': 0x01FF,
+    'ANY': 0xFFFF
+}
+
 SOUNDS = {
     'OVER9000': pygame.mixer.Sound(getfile("sounds/its_over_9000.ogg")),
     'PLACE1': pygame.mixer.Sound(getfile("sounds/place_1.ogg")),
