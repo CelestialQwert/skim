@@ -9,6 +9,19 @@ pygame.init()
 
 FPS = 20
 
+#these map to the physical pins on the arduino
+B_1000L  = 2
+B_1000R  = 3
+B_500    = 4
+B_400    = 5
+B_300    = 6
+B_200    = 7
+B_100    = 8
+B_RET    = 9
+B_CONFIG = 10
+B_START  = 11
+B_SELECT = 12
+
 FONTS = {
     'GameOver': ImageFont.truetype(getfile("fonts/GameCube.ttf"), 14),
     'Tiny': ImageFont.load(getfile('fonts/4x6.pil')),
@@ -20,40 +33,6 @@ FONTS = {
 
 IMAGES = {
     'MainLogo' : Image.open(getfile('imgs/combined-logo.png'))
-}
-
-BUTTON = { 
-    'B1000L': 0x0001,
-    'B1000R': 0x0002,
-    'B500':   0x0004,
-    'B400':   0x0008,
-    'B300':   0x0010,
-    'B200':   0x0020,
-    'B100':   0x0040,
-    'BRET':   0x0080,
-    'CONFIG': 0x0100,
-    'START':  0x0200, #red
-    'SELECT': 0x0400, #yellow
-    'ANYBUTTON': 0x0600,
-    'SCORED': 0x007F,
-    'ANY': 0xFFFF
-}
-
-BUTTON = { 
-    'B1000L': 0x0004,
-    'B1000R': 0x0008,
-    'B500':   0x0010,
-    'B400':   0x0020,
-    'B300':   0x0040,
-    'B200':   0x0080,
-    'B100':   0x0100,
-    'BRET':   0x0200,
-    'CONFIG': 0x0400,
-    'START':  0x0800, #red
-    'SELECT': 0x1000, #yellow
-    'ANYBUTTON': 0x0C00,
-    'SCORED': 0x01FF,
-    'ANY': 0xFFFF
 }
 
 SOUNDS = {
