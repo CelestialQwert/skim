@@ -22,7 +22,7 @@ settings_type = {
     #'show_ball_scores': 'boolean'
 }
 
-k = [
+options = [
     'red_game',
     'yellow_game',
     'timeout',
@@ -30,8 +30,6 @@ k = [
     'erase_hi_scores',
     #'show_ball_scores'
 ]
-
-n = len(k)
 
 times = [30,45,60,75,90,9999]
 
@@ -56,7 +54,7 @@ class ConfigMenu():
             with open('config.json','r') as config_json_file:
                 config_json = json.load(config_json_file)
                 for key,value in config_json.items():
-                    if key not in k:
+                    if key not in options:
                         raise ValueError("That's not a proper setting! {}: {}".format(key,value))
                     if settings_type[key] == 'boolean' and type(value) != type(bool()):
                         raise ValueError("That's not a proper value! {}: {}".format(key,value))
@@ -82,9 +80,9 @@ class ConfigMenu():
             self.display()
             self.sensor.update_buttons()
             if self.sensor.is_pressed(BUTTON['START']):
-                if self.cur_loc == n:
+                if self.cur_loc == len(options):
                     break
-                key = k[self.cur_loc]
+                key = options[self.cur_loc]
                 if settings_type[key] == 'boolean':
                     self.settings[key] = not(self.settings[key])
                 if settings_type[key] == 'game':
@@ -98,6 +96,7 @@ class ConfigMenu():
             if self.sensor.is_pressed(BUTTON['SELECT']):
                 self.cur_loc = (self.cur_loc+1)%(n+1)
             time.sleep(.05)
+
         if self.settings['erase_hi_scores']:
             for game in self.game_list:
                 game.load_hi_scores(erase=True)
@@ -114,7 +113,7 @@ class ConfigMenu():
         self.panel.clear()
         self.panel.draw.text((8,1), 'SKEE-BALL CONFIG',font=FONTS['Small'],fill=COLORS.WHITE)
 
-        for i,key in enumerate(k):
+        for i,key in enumerate(options):
             if settings_type[key] == 'boolean':
                 setting_text = 'YES' if self.settings[key] else 'NO'
             else:
@@ -124,7 +123,7 @@ class ConfigMenu():
 
         self.panel.draw.text((6,15+8*n), 'EXIT',font=FONTS['Small'],fill=COLORS.WHITE)
 
-        y = 15+8*self.cur_loc if self.cur_loc == n else 12+8*self.cur_loc
+        y = 15+8*self.cur_loc if self.cur_loc == len(options) else 12+8*self.cur_loc
         self.panel.draw.text((0,y), '>',font=FONTS['Small'],fill=COLORS.WHITE)
 
         self.panel.update()
