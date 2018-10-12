@@ -1,31 +1,29 @@
 import sys
 import pygame
-import PIL
-from . import panel 
+from . import panel
+from . import sensor
 from .common import *
 
+print('init pygame')
 pygame.init()
+print('done init pygame')
 
 class Manager():
 
-    def __init__(self):
+    def __init__(self,states,starting_state):
 
         self.done = False
+        self.sensor = sensor.Sensor()
         self.panel = panel.Panel()
         self.clock = pygame.time.Clock()
         self.fps = 20
-
-        self.states = {
-            "INTRO": Intro(),
-            "DUMMYGAME": DummyGame()
-        }
-
-        self.state_name = 'INTRO'
+        self.states = states
+        self.state_name = starting_state
         self.state = self.states[self.state_name]
-        self.last_state = None
+        self.last_state = ''
 
     def handle_events(self):
-        for event in pygame.event.get():
+        for event in self.sensor.get_events():
             self.state.handle_event(event)
 
     def flip_state(self):            
@@ -51,11 +49,14 @@ class Manager():
         self.panel.update()
 
     def main_loop(self):
+        persist = {}
+        self.state.startup(persist)
         while not self.done:
             dt = self.clock.tick(self.fps)
             self.handle_events()
             self.update(dt)
             self.draw_panel()
+        self.state.cleanup()
         pygame.quit()
 
 class State():
@@ -64,82 +65,36 @@ class State():
         self.done = False
         self.quit = False
         self.next_state = None
-        self.screen_rect = pygame.display.get_surface().get_rect()
+        #self.screen_rect = pygame.display.get_surface().get_rect()
         self.persist = {}
 
     def startup(self,persist):
         self.persist = persist
 
     def handle_event(self,event):
-        if event.type == pygame.QUIT:
+        if event.button == Button.QUIT:
             self.quit = True
 
     def update(self,dt):
         pass
 
-    def draw_panel(self):
+    def draw_panel(self,panel):
         pass
 
     def cleanup(self):
         return self.persist
 
-class Intro(State):
+def test():
+    from . import test_states
 
-    def __init__(self):
-        super(Intro,self).__init__()
-        self.persist["screen_color"] = "black"
-        self.next_state = "DUMMYGAME"
-
-    def handle_event(self, event):
-        if event.type == pygame.QUIT:
-            self.quit = True
-        elif event.type == pygame.KEYUP:
-            self.persist["screen_color"] = COLORS['YELLOW']
-            self.done = True
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self.persist["screen_color"] = COLORS['CYAN']
-            self.done = True
-
-    def draw_panel(self, panel):
-        panel.clear()
-        panel.draw.text((16,16), "Intro WOOO",font=FONTS['Medium'],fill=COLORS['RED'])
-
-
-class DummyGame(State):
-    def __init__(self):
-        super(DummyGame, self).__init__()
-        self.rect_loc = (0, 0)
-        self.rect_size = (16, 16)
-        self.rect_x_velocity = 1
-        self.text_loc = (10,10)
-        
-    def startup(self, persist):
-        self.persist = persist
-        self.screen_color = self.persist["screen_color"]
-        if self.screen_color == COLORS['CYAN']:
-            self.text = "Mouseclick"
-        elif self.screen_color == COLORS['YELLOW']:
-            self.text = "Keypress"
-        
-    def handle_event(self, event):
-        if event.type == pygame.QUIT:
-            self.quit = True
-        elif event.type == pygame.MOUSEBUTTONUP:
-            self.text_loc = tuple(x // 6 for x in event.pos)
-        
-    def update(self,dt):
-        veloc = (self.rect_x_velocity,0)
-        self.rect_loc  = tuple(map(sum, zip(self.rect_loc,veloc)))
-        if self.rect_loc[0] > 79 or self.rect_loc[0] < 1:
-            self.rect_x_velocity *= -1
-                 
-    def draw_panel(self, panel):
-        panel.fill(self.screen_color)
-        panel.draw.rectangle(self.rect_loc+self.rect_size,fill=COLORS['BLACK'])
-        panel.draw.text(self.text_loc,self.text,font=FONTS['Medium'],fill=(25,25,25))
-
+    states = {
+            "INTRO": test_states.Intro(),
+            "DUMMYGAME": test_states.DummyGame()
+        }
+    starting_state = 'INTRO'
+    
+    game = Manager(states,starting_state)
+    game.main_loop()
 
 if __name__ == "__main__":
-    
-    game = Manager()
-    game.main_loop()
+    test()

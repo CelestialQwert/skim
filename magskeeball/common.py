@@ -1,5 +1,6 @@
 from PIL import Image, ImageFont
 from pkg_resources import resource_filename
+from enum import Enum
 import pygame
 
 def getfile(path):
@@ -10,17 +11,41 @@ pygame.init()
 FPS = 20
 
 #these map to the physical pins on the arduino
-B_1000L  = 2
-B_1000R  = 3
-B_500    = 4
-B_400    = 5
-B_300    = 6
-B_200    = 7
-B_100    = 8
-B_RET    = 9
-B_CONFIG = 10
-B_START  = 11
-B_SELECT = 12
+class Button(Enum):
+    QUIT    = 0
+    NULL_01 = 1
+    B1000L  = 2
+    B1000R  = 3
+    B500    = 4
+    B400    = 5
+    B300    = 6
+    B200    = 7
+    B100    = 8
+    RETURN  = 9
+    CONFIG  = 10
+    START   = 11
+    SELECT  = 12
+    NULL_13 = 13
+    NULL_14 = 14
+    NULL_15 = 15
+    NULL_16 = 16
+    NULL_17 = 17
+    NULL_18 = 18
+    NULL_19 = 19
+
+B = Button
+BUTTON = Button
+
+POINTS = {
+    Button.B1000L: 1000,
+    Button.B1000R: 1000,
+    Button.B500: 500,
+    Button.B400: 400,
+    Button.B300: 300,
+    Button.B200: 200,
+    Button.B100: 100,
+}
+
 
 FONTS = {
     'GameOver': ImageFont.truetype(getfile("fonts/GameCube.ttf"), 14),
@@ -42,12 +67,13 @@ SOUNDS = {
     'PLACE3': pygame.mixer.Sound(getfile("sounds/place_3.ogg")),
     'PLACE4': pygame.mixer.Sound(getfile("sounds/place_4.ogg")),
     'PLACE5': pygame.mixer.Sound(getfile("sounds/place_5.ogg")),
-    'SCORE100': pygame.mixer.Sound(getfile("sounds/sonic_ring.ogg")),
-    'SCORE200': pygame.mixer.Sound(getfile("sounds/mario_coin.ogg")),
-    'SCORE300': pygame.mixer.Sound(getfile("sounds/pac_man_wakka.ogg")),
-    'SCORE400': pygame.mixer.Sound(getfile("sounds/mega_man_item_get.ogg")),
-    'SCORE500': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
-    'SCORE1000': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
+    'B100': pygame.mixer.Sound(getfile("sounds/sonic_ring.ogg")),
+    'B200': pygame.mixer.Sound(getfile("sounds/mario_coin.ogg")),
+    'B300': pygame.mixer.Sound(getfile("sounds/pac_man_wakka.ogg")),
+    'B400': pygame.mixer.Sound(getfile("sounds/mega_man_item_get.ogg")),
+    'B500': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
+    'B1000L': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
+    'B1000R': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
 }
 
 ATTRACT_MUSIC = {
@@ -72,11 +98,11 @@ COLORS = {
     'RED': (255,0,0),
     'YELLOW': (255,255,0),
     'GREEN': (0,255,0),
+    'CYAN': (0,255,255),
     'BLUE': (50,50,255),
     'MAGENTA': (255,0,255),
     'PINK': (255,150,150),
     'WHITE': (255,255,255),
-    'CYAN': (0,255,255),
     'PURPLE': (100,0,255),
     'ORANGE': (255,69,0),
 }

@@ -1,4 +1,3 @@
-import magskeeball.manager
+import magskeeball.main
 
-game = magskeeball.manager.Manager()
-game.main_loop()
+magskeeball.main.run()
