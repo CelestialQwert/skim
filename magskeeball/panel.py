@@ -9,6 +9,8 @@ REAL = 0
 EMULATED = 1
 BOTH = 2
 
+pygame.init()
+
 class Panel():
 
     def __init__(self,scale=6):
@@ -71,7 +73,6 @@ class Panel():
         #time.sleep(5)
 
     def init_emulated_panel(self,scale):
-        pygame.init()
         self.e_size = tuple([x*scale for x in (96,64)])
         self.emu_panel = pygame.display.set_mode(self.e_size)
 
@@ -96,3 +97,6 @@ class Panel():
 
     def clear(self):
         self.draw.rectangle((0,0,96,64),fill=(0,0,0))
+
+    def fill(self,color):
+        self.draw.rectangle((0,0,96,64),fill=color)

@@ -66,27 +66,30 @@ START_MUSIC = {
 ATTRACT_MUSIC_KEYS = list(ATTRACT_MUSIC.keys())
 START_MUSIC_KEYS = list(START_MUSIC.keys())
 
-class COLORS:
-    RED = (255,0,0)
-    YELLOW = (255,255,0)
-    GREEN = (0,255,0)
-    BLUE = (50,50,255)
-    MAGENTA = (255,0,255)
-    PINK = (255,150,150)
-    WHITE = (255,255,255)
-    CYAN = (0,255,255)
-    PURPLE = (100,0,255)
-    ORANGE = (255,69,0)
+
+COLORS = {
+    'BLACK': (0,0,0),
+    'RED': (255,0,0),
+    'YELLOW': (255,255,0),
+    'GREEN': (0,255,0),
+    'BLUE': (50,50,255),
+    'MAGENTA': (255,0,255),
+    'PINK': (255,150,150),
+    'WHITE': (255,255,255),
+    'CYAN': (0,255,255),
+    'PURPLE': (100,0,255),
+    'ORANGE': (255,69,0),
+}
 
 BALL_COLORS = [
-    COLORS.RED,
-    COLORS.RED,
-    COLORS.YELLOW,
-    COLORS.YELLOW,
-    COLORS.GREEN,
-    COLORS.GREEN,
-    COLORS.GREEN,
-    COLORS.GREEN,
-    COLORS.GREEN,
-    COLORS.GREEN,
+    COLORS['RED'],
+    COLORS['RED'],
+    COLORS['YELLOW'],
+    COLORS['YELLOW'],
+    COLORS['GREEN'],
+    COLORS['GREEN'],
+    COLORS['GREEN'],
+    COLORS['GREEN'],
+    COLORS['GREEN'],
+    COLORS['GREEN']
 ]
