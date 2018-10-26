@@ -1,51 +1,12 @@
 from PIL import Image, ImageFont
 from pkg_resources import resource_filename
-from enum import Enum
 import pygame
+from enum import Enum
 
 def getfile(path):
     return resource_filename('magskeeball',path)
 
-pygame.init()
-
-FPS = 20
-
-#these map to the physical pins on the arduino
-class Button(Enum):
-    QUIT    = 0
-    NULL_01 = 1
-    B1000L  = 2
-    B1000R  = 3
-    B500    = 4
-    B400    = 5
-    B300    = 6
-    B200    = 7
-    B100    = 8
-    RETURN  = 9
-    CONFIG  = 10
-    START   = 11
-    SELECT  = 12
-    NULL_13 = 13
-    NULL_14 = 14
-    NULL_15 = 15
-    NULL_16 = 16
-    NULL_17 = 17
-    NULL_18 = 18
-    NULL_19 = 19
-
-B = Button
-BUTTON = Button
-
-POINTS = {
-    Button.B1000L: 1000,
-    Button.B1000R: 1000,
-    Button.B500: 500,
-    Button.B400: 400,
-    Button.B300: 300,
-    Button.B200: 200,
-    Button.B100: 100,
-}
-
+pygame.mixer.init()
 
 FONTS = {
     'GameOver': ImageFont.truetype(getfile("fonts/GameCube.ttf"), 14),
@@ -92,6 +53,44 @@ START_MUSIC = {
 ATTRACT_MUSIC_KEYS = list(ATTRACT_MUSIC.keys())
 START_MUSIC_KEYS = list(START_MUSIC.keys())
 
+
+FPS = 20
+
+#these map to the physical pins on the arduino except QUIT
+class Button(Enum):
+    QUIT    = 0
+    NULL_01 = 1
+    B1000L  = 2
+    B1000R  = 3
+    B500    = 4
+    B400    = 5
+    B300    = 6
+    B200    = 7
+    B100    = 8
+    RETURN  = 9
+    CONFIG  = 10
+    START   = 11
+    SELECT  = 12
+    NULL_13 = 13
+    NULL_14 = 14
+    NULL_15 = 15
+    NULL_16 = 16
+    NULL_17 = 17
+    NULL_18 = 18
+    NULL_19 = 19
+
+B = Button
+BUTTON = Button
+
+POINTS = {
+    Button.B1000L: 1000,
+    Button.B1000R: 1000,
+    Button.B500: 500,
+    Button.B400: 400,
+    Button.B300: 300,
+    Button.B200: 200,
+    Button.B100: 100,
+}
 
 COLORS = {
     'BLACK': (0,0,0),

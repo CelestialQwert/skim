@@ -1,4 +1,4 @@
-from .common import *
+#from .common import *
 from PIL import Image, ImageFont, ImageDraw
 import sys
 import pygame
@@ -27,29 +27,6 @@ class Panel():
             self.emulated_panel = True
             print("Hello emulated panel!")
 
-        self.canvas = Image.new('RGBA',(96,64))
-        self.draw = ImageDraw.Draw(self.canvas)
-        self.paste = self.canvas.paste
-
-    def old_init(self,which_panel=REAL,scale=6):
-        #if Windows is detected, force emulated panel only
-        if platform.system() == 'Windows':
-            which_panel = EMULATED
-        if which_panel not in [REAL,EMULATED,BOTH]:
-                raise ValueError('Argument must be panel.REAL (0), panel.EMULATED (1), or panel.BOTH (2)')
-        if which_panel != REAL:
-            self.emulated_panel = True
-            self.init_emulated_panel(scale)
-        else:
-            self.emulated_panel = False
-        
-        if which_panel != EMULATED:
-            self.real_panel = True
-            self.init_real_panel()
-        else:
-            self.real_panel = False
-
-        self.buffer_canvas = Image.new('RGBA',(192,32))
         self.canvas = Image.new('RGBA',(96,64))
         self.draw = ImageDraw.Draw(self.canvas)
         self.paste = self.canvas.paste

@@ -1,3 +1,3 @@
 import magskeeball.main
 
-magskeeball.main.main()
+magskeeball.main.run()

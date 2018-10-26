@@ -1,11 +1,11 @@
-from .manager import State
+from .state import State
 from .common import *
 import pygame
 
 class Intro(State):
 
-    def __init__(self):
-        super(Intro,self).__init__()
+    def __init__(self,manager):
+        super(Intro,self).__init__(manager)
         self.persist["screen_color"] = "black"
         self.next_state = "DUMMYGAME"
 
@@ -27,10 +27,15 @@ class Intro(State):
         panel.clear()
         panel.draw.text((16,16), "Intro WOOO",font=FONTS['Medium'],fill=COLORS['GREEN'])
 
+    def cleanup(self):
+        print("Red game is {}".format(self.manager.red_game))
+        self.manager.red_game = 'TACOS'
+        return self.persist
+
 
 class DummyGame(State):
-    def __init__(self):
-        super(DummyGame, self).__init__()
+    def __init__(self,manager):
+        super(DummyGame, self).__init__(manager)
         self.rect_loc = (0, 0)
         self.rect_size = (16, 16)
         self.rect_x_velocity = 1
@@ -43,6 +48,7 @@ class DummyGame(State):
             self.text = "Start Press"
         elif self.screen_color == COLORS['YELLOW']:
             self.text = "Select Press"
+        print("Red game is {}".format(self.manager.red_game))
         
     def handle_event(self, event):
         if event.type == pygame.QUIT:

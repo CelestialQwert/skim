@@ -1,11 +1,13 @@
-from .common import *
+from . import resources as res
 from .findserial import find_serial_ports
 from pkg_resources import resource_filename
 import sys
 import pygame
-import struct
 import serial
 import time
+
+Button = res.Button
+B = res.Button
 
 KEYMAP = {
     pygame.K_1: B.B100,

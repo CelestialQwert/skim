@@ -1,47 +1,53 @@
-from .manager import State
-from .common import *
-import pygame
+from .state import GameMode
+from . import resources as res
 import random
 import time
 
-class BasicSkeeball(State):
+class BasicSkeeball(GameMode):
 
-    def __init__(self):
-        super(BasicSkeeball,self).__init__()
-        self.persist["screen_color"] = "black"
-        self.next_state = "BASIC"
+    has_high_scores = True
 
-    def startup(self,persist):
-        self.persist = persist
-        print("BASIC!")
+    def startup(self):
+        print("Starting BASIC!")
 
         self.score = 0
         self.score_buffer = 0
         self.balls = 9
+        self.returned_balls = 9
         self.ball_scores = []
-        self.show_ball_scores = False
         self.advance_score = False
-        #self.draw_panel()
-        self.start_song = START_MUSIC[random.choice(START_MUSIC_KEYS)]
+
+        self.start_song = res.START_MUSIC[random.choice(res.START_MUSIC_KEYS)]
         self.start_song.play()
+
         self.ticks = 0
         self.ticks_last_ball = 0
-        self.timeout = 30*20
+
+        self.debug = True
+        self.timeout = self.settings['timeout']*res.FPS
+
+        self.persist['last_game_mode'] = 'BASIC'
 
         #self.sensor.release_balls()
 
     def handle_event(self,event):
-        if event.button == Button.QUIT:
+        if event.button == res.B.QUIT:
             self.quit = True
         if self.balls == 0:
             return 
-        if event.down and event.button in POINTS:
-            self.add_score(POINTS[event.button])
-            SOUNDS[event.button.name].play()
-        if event.button == Button.CONFIG:
+        if event.down and event.button in res.POINTS:
+            self.add_score(res.POINTS[event.button])
+            res.SOUNDS[event.button.name].play()
+        if event.down and event.button == res.B.RETURN:
+            self.returned_balls-=1
+            if self.returned_balls < self.balls:
+                self.ball_scores.append(0)
+                self.balls = self.returned_balls
+        if event.button == res.B.CONFIG:
             self.balls = 0
+            self.returned_balls = 0
 
-    def update(self,dt):
+    def update(self):
         if self.advance_score:
             if self.score_buffer > 0:
                 self.score += 100
@@ -49,28 +55,32 @@ class BasicSkeeball(State):
                 if self.score_buffer == 0:
                     self.advance_score = False
         self.ticks += 1
-        print(self.ticks)
-        if (self.ticks - self.ticks_last_ball) >  self.timeout:
+        #print(self.ticks)
+        if (self.ticks - self.ticks_last_ball) > self.timeout:
             self.balls = 0
         if self.balls == 0 and not self.advance_score:
+            self.manager.next_state = "HIGHSCORE"
             self.done = True
 
     def draw_panel(self,panel):
         panel.clear()
-        d = 6 if self.show_ball_scores else 0
-        panel.draw.text((42-d, 39), "%d" % self.balls,font=FONTS['Digital14'],fill=BALL_COLORS[self.balls])
-        panel.draw.text((17-d, 4), "%04d" % self.score ,font=FONTS['Digital16'],fill=COLORS['PURPLE'])
-        panel.draw.text((16-d,44), "BALL" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
-        panel.draw.text((57-d,44), "LEFT" ,font=FONTS['Medium'],fill=BALL_COLORS[self.balls])
-        if self.show_ball_scores:
+        d = 6 if self.debug else 0
+        panel.draw.text((42-d, 39), "%d" % self.balls ,font=res.FONTS['Digital14'], fill=res.BALL_COLORS[self.balls])
+        panel.draw.text((17-d, 4), "%04d" % self.score, font=res.FONTS['Digital16'], fill=res.COLORS['PURPLE'])
+        panel.draw.text((16-d,44), "BALL", font=res.FONTS['Medium'], fill=res.BALL_COLORS[self.balls])
+        panel.draw.text((57-d,44), "LEFT", font=res.FONTS['Medium'], fill=res.BALL_COLORS[self.balls])
+        if self.debug:
             for i,num in enumerate(self.ball_scores):
-                t=4 if num == '1000' else 0
-                panel.draw.text((84-t,1+6*i),num,font=FONTS['Tiny'],fill=COLORS.RED)
+                num = str(num)
+                t = 4*len(num)
+                panel.draw.text((96-t,1+6*i),num,font=res.FONTS['Tiny'],fill=res.COLORS['RED'])
+            panel.draw.text((90,57), "%d" % self.returned_balls,font=res.FONTS['Small'],fill=res.COLORS['ORANGE'])
 
     def cleanup(self):
         print("Pausing for 2 seconds")
         time.sleep(2)
-        return self.persist
+        self.persist['last_score'] = self.score
+        return
 
     def add_score(self,score):
         self.score_buffer += score
