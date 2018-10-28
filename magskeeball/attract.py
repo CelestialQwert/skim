@@ -26,6 +26,7 @@ class Attract(State):
         self.current_display_ticks = 0
         self.current_display_func, self.current_display_time = self.display_queue[0]
         self.current_display = 0
+        self.attract_song = res.ATTRACT_MUSIC[random.choice(res.ATTRACT_MUSIC_KEYS)]
 
 
     def get_display_queue(self):
@@ -36,16 +37,16 @@ class Attract(State):
             queue.append((self.draw_logo,10))
             if self.has_high_scores[self.yellow_game]:
                 queue.append((self.draw_yellow_scores,10))
-            if queue[0] != self.draw_logo:
-                queue.append((self.draw_logo,10))
+                if queue[0] != self.draw_logo:
+                    queue.append((self.draw_logo,10))
         elif self.persist['last_color'] == 'yellow':
             if self.has_high_scores[self.yellow_game]:
                 queue.append((self.draw_yellow_scores,10))
             queue.append((self.draw_logo,10))
             if self.has_high_scores[self.red_game]:
                 queue.append((self.draw_red_scores,10))
-            if queue[0] != self.draw_logo:
-                queue.append((self.draw_logo,10))
+                if queue[0] != self.draw_logo:
+                    queue.append((self.draw_logo,10))
         else:
             if self.has_high_scores[self.red_game]:
                 queue.append((self.draw_logo,10))

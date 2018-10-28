@@ -10,6 +10,8 @@ pygame.mixer.init()
 
 FONTS = {
     'GameOver': ImageFont.truetype(getfile("fonts/GameCube.ttf"), 14),
+    'MAGFest': ImageFont.truetype(getfile("fonts/radio_stars.otf"), 15),
+    'MAGMini': ImageFont.truetype(getfile("fonts/radio_stars.otf"), 12),
     'Tiny': ImageFont.load(getfile('fonts/4x6.pil')),
     'Small': ImageFont.load(getfile('fonts/5x7.pil')),
     'Medium': ImageFont.load(getfile('fonts/6x10.pil')),

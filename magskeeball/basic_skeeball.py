@@ -23,7 +23,7 @@ class BasicSkeeball(GameMode):
         self.ticks = 0
         self.ticks_last_ball = 0
 
-        self.debug = True
+        self.debug = self.settings['debug']
         self.timeout = self.settings['timeout']*res.FPS
 
         self.persist['last_game_mode'] = 'BASIC'
@@ -77,8 +77,8 @@ class BasicSkeeball(GameMode):
             panel.draw.text((90,57), "%d" % self.returned_balls,font=res.FONTS['Small'],fill=res.COLORS['ORANGE'])
 
     def cleanup(self):
-        print("Pausing for 2 seconds")
-        time.sleep(2)
+        print("Pausing for 1 seconds")
+        time.sleep(1)
         self.persist['last_score'] = self.score
         return
 

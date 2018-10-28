@@ -13,7 +13,7 @@ class HighScore(State):
         self.high_scores = {}
 
     def startup(self):
-        self.manager.next_state = 'ATTRACT'
+        self.manager.next_state = 'GAMEOVER'
         self.last_game_mode = self.persist['last_game_mode']
         self.score = self.persist['last_score']
         self.game_high_scores = self.high_scores[self.last_game_mode]
@@ -90,7 +90,7 @@ class HighScore(State):
         else:
             panel.draw.text((19,40), "RED = PICK" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
         panel.draw.text((39,50), self.name ,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
-        if self.ticks % 6 < 4 and len(self.name) < 4:
+        if self.ticks % 4 < 3 and len(self.name) < 4:
             #blink current letter
             panel.draw.text((39+6*len(self.name),50), self.curr_letter ,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
         panel.draw.text((19,50), "#%d" % self.place,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
@@ -108,6 +108,12 @@ class HighScore(State):
         for game_mode in self.manager.game_modes:
             if self.manager.states[game_mode].has_high_scores:
                 self.high_scores[game_mode] = self.load_high_scores(game_mode)
+        return self.high_scores
+
+    def init_all_high_scores(self):
+        for game_mode in self.manager.game_modes:
+            if self.manager.states[game_mode].has_high_scores:
+                self.high_scores[game_mode] = self.init_high_scores(game_mode)
         return self.high_scores
 
     def init_high_scores(self,game_mode):

@@ -43,8 +43,8 @@ class Sensor:
         self.keyboard_buttons = [False]*NUM_BUTTONS
         self.buttons = [0]*NUM_BUTTONS
 
-        self.delay = 40
-        self.interval = 5
+        self.delay = 20
+        self.interval = 3
 
         try:
             self.init_arduino()

@@ -6,9 +6,11 @@ from . import sensor
 from . import resources as res
 
 from .attract import Attract
-from .fake_settings import Settings
+from .settings import Settings
 from .high_scores import HighScore
+from .gameover import GameOver
 from .basic_skeeball import BasicSkeeball
+from .target import Target
 from .dummy import Dummy
 
 print('init pygame')
@@ -27,10 +29,12 @@ class Manager():
                 "ATTRACT": Attract(manager=self),
                 "SETTINGS": Settings(manager=self),
                 "HIGHSCORE": HighScore(manager=self),
+                "GAMEOVER": GameOver(manager=self),
                 "BASIC": BasicSkeeball(manager=self),
+                "TARGET": Target(manager=self),
                 "DUMMY": Dummy(manager=self),
             }
-            self.game_modes = ['BASIC','DUMMY']
+            self.game_modes = ['BASIC','TARGET','DUMMY']
 
             self.has_high_scores = {}
             for game_mode in self.game_modes:
@@ -49,9 +53,10 @@ class Manager():
         self.state = self.states[self.state_name]
 
         self.settings['red_game'] = 'BASIC'
-        self.settings['yellow_game'] = 'BASIC'
+        self.settings['yellow_game'] = 'DUMMY'
         self.settings['timeout'] = 60
         self.settings['save_high_scores'] = True
+        self.settings['debug'] = False
 
         self.persist['last_color'] = 'none'
 
@@ -59,6 +64,10 @@ class Manager():
         self.next_state = ''
 
         self.high_scores = self.states['HIGHSCORE'].load_all_high_scores()
+        #lol mutable
+        temp_settings = self.states['SETTINGS'].load_settings()
+        for key,value in temp_settings.items():
+            self.settings[key] = value
 
     def handle_events(self):
         for event in self.sensor.get_events():

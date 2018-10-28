@@ -17,3 +17,5 @@ class Dummy(GameMode):
         panel.clear()
         panel.draw.text((1,0), 'DUMMY GAME',font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
         panel.draw.text((1,9), 'RED TO QUIT',font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        panel.draw.text((1,20), 'DUMMY GAME',font=res.FONTS['MAGFest'],fill=res.COLORS['WHITE'])
+        panel.draw.text((1,40), 'RED TO QUIT',font=res.FONTS['MAGFest'],fill=res.COLORS['WHITE'])
