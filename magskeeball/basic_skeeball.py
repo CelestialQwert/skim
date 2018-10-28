@@ -8,7 +8,7 @@ class BasicSkeeball(GameMode):
     has_high_scores = True
 
     def startup(self):
-        print("Starting BASIC!")
+        print("Starting Skeeball!")
 
         self.score = 0
         self.score_buffer = 0
@@ -41,8 +41,8 @@ class BasicSkeeball(GameMode):
         if event.down and event.button == res.B.RETURN:
             self.returned_balls-=1
             if self.returned_balls < self.balls:
-                self.ball_scores.append(0)
-                self.balls = self.returned_balls
+                self.add_score(0)
+                res.SOUNDS['MISS'].play()
         if event.button == res.B.CONFIG:
             self.balls = 0
             self.returned_balls = 0
@@ -52,8 +52,8 @@ class BasicSkeeball(GameMode):
             if self.score_buffer > 0:
                 self.score += 100
                 self.score_buffer -= 100
-                if self.score_buffer == 0:
-                    self.advance_score = False
+        if self.score_buffer == 0:
+            self.advance_score = False
         self.ticks += 1
         #print(self.ticks)
         if (self.ticks - self.ticks_last_ball) > self.timeout:

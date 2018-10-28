@@ -11,6 +11,7 @@ from .high_scores import HighScore
 from .gameover import GameOver
 from .basic_skeeball import BasicSkeeball
 from .target import Target
+from .combo import Combo
 from .dummy import Dummy
 
 print('init pygame')
@@ -32,9 +33,10 @@ class Manager():
                 "GAMEOVER": GameOver(manager=self),
                 "BASIC": BasicSkeeball(manager=self),
                 "TARGET": Target(manager=self),
+                "COMBO": Combo(manager=self),
                 "DUMMY": Dummy(manager=self),
             }
-            self.game_modes = ['BASIC','TARGET','DUMMY']
+            self.game_modes = ['BASIC','TARGET','COMBO','DUMMY']
 
             self.has_high_scores = {}
             for game_mode in self.game_modes:

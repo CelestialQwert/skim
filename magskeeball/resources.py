@@ -30,6 +30,7 @@ SOUNDS = {
     'PLACE3': pygame.mixer.Sound(getfile("sounds/place_3.ogg")),
     'PLACE4': pygame.mixer.Sound(getfile("sounds/place_4.ogg")),
     'PLACE5': pygame.mixer.Sound(getfile("sounds/place_5.ogg")),
+    'MISS': pygame.mixer.Sound(getfile("sounds/mario_death.ogg")),
     'B100': pygame.mixer.Sound(getfile("sounds/sonic_ring.ogg")),
     'B200': pygame.mixer.Sound(getfile("sounds/mario_coin.ogg")),
     'B300': pygame.mixer.Sound(getfile("sounds/pac_man_wakka.ogg")),

@@ -7,6 +7,7 @@ class Target(BasicSkeeball):
 
     def startup(self):
         super(Target,self).startup()
+        print("Special Mode: Target")
         self.persist['last_game_mode'] = 'TARGET'
         self.ball_bonuses= []
         self.got_bonus = 'idle'
