@@ -6,6 +6,7 @@ from . import sensor
 from . import resources as res
 
 from .attract import Attract
+from .fake_settings import Settings
 from .high_scores import HighScore
 from .basic_skeeball import BasicSkeeball
 from .dummy import Dummy
@@ -24,11 +25,16 @@ class Manager():
         if states == None:
             self.states = {
                 "ATTRACT": Attract(manager=self),
+                "SETTINGS": Settings(manager=self),
                 "HIGHSCORE": HighScore(manager=self),
                 "BASIC": BasicSkeeball(manager=self),
                 "DUMMY": Dummy(manager=self),
             }
             self.game_modes = ['BASIC','DUMMY']
+
+            self.has_high_scores = {}
+            for game_mode in self.game_modes:
+                self.has_high_scores[game_mode] = self.states[game_mode].has_high_scores
         else:
             self.states = {}
             for state in states:
@@ -43,9 +49,11 @@ class Manager():
         self.state = self.states[self.state_name]
 
         self.settings['red_game'] = 'BASIC'
-        self.settings['yellow_game'] = 'DUMMY'
+        self.settings['yellow_game'] = 'BASIC'
         self.settings['timeout'] = 60
         self.settings['save_high_scores'] = True
+
+        self.persist['last_color'] = 'none'
 
         self.last_state = ''
         self.next_state = ''
