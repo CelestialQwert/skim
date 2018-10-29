@@ -7,6 +7,7 @@ from . import resources as res
 
 from .attract import Attract
 from .settings import Settings
+from .intro import Intro
 from .high_scores import HighScore
 from .gameover import GameOver
 from .basic_skeeball import BasicSkeeball
@@ -29,6 +30,7 @@ class Manager():
             self.states = {
                 "ATTRACT": Attract(manager=self),
                 "SETTINGS": Settings(manager=self),
+                "INTRO": Intro(manager=self),
                 "HIGHSCORE": HighScore(manager=self),
                 "GAMEOVER": GameOver(manager=self),
                 "BASIC": BasicSkeeball(manager=self),

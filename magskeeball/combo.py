@@ -13,10 +13,17 @@ COMBO_COLORS = [
 
 class Combo(BasicSkeeball):
 
+    intro_text = [
+        "HIT THE SAME TARGET",
+        "TO BUILD A COMBO",
+        "AND GET MASSIVE",
+        "POINTS!"
+    ]
+
     def startup(self):
         super(Combo,self).startup()
         print("Special Mode: Combo")
-        self.persist['last_game_mode'] = 'COMBO'
+        self.persist['active_game_mode'] = 'COMBO'
         self.combo = 0
         self.ball_scores = ['0']
         self.just_scored = False
@@ -28,6 +35,7 @@ class Combo(BasicSkeeball):
             res.SOUNDS['OVER9000'].play()
         if self.just_scored and (self.ticks - self.ticks_last_ball) >= 2*res.FPS:
                 self.just_scored = False
+            
 
     def add_score(self,score):
         self.ball_scores.append(score)

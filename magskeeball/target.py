@@ -5,20 +5,33 @@ import random
 
 class Target(BasicSkeeball):
 
+    intro_text = [
+        "HIT THE TARGET TO",
+        "SCORE 1000 POINTS!"
+    ]
+
     def startup(self):
         super(Target,self).startup()
         print("Special Mode: Target")
-        self.persist['last_game_mode'] = 'TARGET'
+        self.persist['active_game_mode'] = 'TARGET'
         self.ball_bonuses= []
         self.got_bonus = 'idle'
         self.bonus = [100,200,200,300,300,300,400,400,500]
         random.shuffle(self.bonus)
+        self.bg_music = res.GAME_MUSIC['TARGET_BG']
+        self.bg_music.play()
+        self.playing_outro = False
+
 
     def update(self):
         super(Target,self).update()
         if self.got_bonus != 'idle':
             if (self.ticks - self.ticks_last_ball) >= 2*res.FPS:
                 self.got_bonus = 'idle'
+        if self.balls == 0 and not self.playing_outro:
+            self.bg_music.stop()
+            res.GAME_MUSIC['COMPLETE'].play()
+
 
     def add_score(self,score):
         self.ball_scores.append(score)
@@ -57,3 +70,6 @@ class Target(BasicSkeeball):
                 color = res.COLORS['WHITE'] if b else res.COLORS['RED']
                 panel.draw.text((96-t,1+6*i),num,font=res.FONTS['Tiny'],fill=color)
             panel.draw.text((90,57), "%d" % self.returned_balls,font=res.FONTS['Small'],fill=res.COLORS['ORANGE'])
+
+    #def cleanup(self):
+    #    super(Target,self).cleanup()

@@ -60,11 +60,13 @@ class Attract(State):
 
     def handle_event(self,event):
         if event.button == res.B.START and event.down:
-            self.manager.next_state = self.red_game
+            self.manager.next_state = 'INTRO'
+            self.persist['active_game_mode'] = self.red_game
             self.persist['last_color'] = 'red'
             self.done = True
         elif event.button == res.B.SELECT and event.down:
-            self.manager.next_state = self.yellow_game
+            self.manager.next_state = 'INTRO'
+            self.persist['active_game_mode'] = self.yellow_game
             self.persist['last_color'] = 'yellow'
             self.done = True
         elif event.button == res.B.CONFIG and event.down:

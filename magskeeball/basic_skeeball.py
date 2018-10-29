@@ -1,11 +1,15 @@
 from .state import GameMode
 from . import resources as res
-import random
 import time
 
 class BasicSkeeball(GameMode):
 
     has_high_scores = True
+    intro_text = [
+        "THE SKEE-BALL YOU",
+        "KNOW AND LOVE"
+    ]
+
 
     def startup(self):
         print("Starting Skeeball!")
@@ -17,16 +21,13 @@ class BasicSkeeball(GameMode):
         self.ball_scores = []
         self.advance_score = False
 
-        self.start_song = res.START_MUSIC[random.choice(res.START_MUSIC_KEYS)]
-        self.start_song.play()
-
         self.ticks = 0
         self.ticks_last_ball = 0
 
         self.debug = self.settings['debug']
         self.timeout = self.settings['timeout']*res.FPS
 
-        self.persist['last_game_mode'] = 'BASIC'
+        self.persist['active_game_mode'] = 'BASIC'
 
         #self.sensor.release_balls()
 

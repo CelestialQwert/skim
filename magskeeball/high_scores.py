@@ -14,9 +14,9 @@ class HighScore(State):
 
     def startup(self):
         self.manager.next_state = 'GAMEOVER'
-        self.last_game_mode = self.persist['last_game_mode']
+        self.active_game_mode = self.persist['active_game_mode']
         self.score = self.persist['last_score']
-        self.game_high_scores = self.high_scores[self.last_game_mode]
+        self.game_high_scores = self.high_scores[self.active_game_mode]
 
         place = 0
 
@@ -101,7 +101,7 @@ class HighScore(State):
             time.sleep(2)
             self.name = self.name[:3]
             new_high_scores = self.game_high_scores[:self.place-1] + [(self.name, self.score)] + self.game_high_scores[self.place-1:4]
-            self.save_high_scores(self.last_game_mode,new_high_scores)
+            self.save_high_scores(self.active_game_mode,new_high_scores)
 
 
     def load_all_high_scores(self):
