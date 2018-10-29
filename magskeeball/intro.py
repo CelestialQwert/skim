@@ -14,7 +14,7 @@ class Intro(State):
         self.intro_text = self.mode.intro_text
         self.ticks = 0
         if self.mode_name == 'TARGET':
-            self.start_song = res.GAME_MUSIC['TARGET_INTRO']
+            self.start_song = res.TARGET_SFX['TARGET_INTRO']
         else:
             self.start_song = res.START_MUSIC[random.choice(res.START_MUSIC_KEYS)]
         self.start_song.play()

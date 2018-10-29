@@ -53,10 +53,12 @@ START_MUSIC = {
     'STEEL': pygame.mixer.Sound(getfile("sounds/balls_of_steel.ogg")),
 }
 
-GAME_MUSIC = {
+TARGET_SFX = {
     'TARGET_INTRO': pygame.mixer.Sound(getfile("sounds/break_the_targets.ogg")),
     'TARGET_BG': pygame.mixer.Sound(getfile("sounds/target_theme.ogg")),
     'COMPLETE': pygame.mixer.Sound(getfile("sounds/complete.ogg")),
+    'TARGET_HIT': pygame.mixer.Sound(getfile("sounds/target_hit.ogg")),
+    'TARGET_MISS': pygame.mixer.Sound(getfile("sounds/target_miss.ogg")),
 }
 
 ATTRACT_MUSIC_KEYS = list(ATTRACT_MUSIC.keys())

@@ -38,7 +38,6 @@ class BasicSkeeball(GameMode):
             return 
         if event.down and event.button in res.POINTS:
             self.add_score(res.POINTS[event.button])
-            res.SOUNDS[event.button.name].play()
         if event.down and event.button == res.B.RETURN:
             self.returned_balls-=1
             if self.returned_balls < self.balls:
@@ -91,3 +90,4 @@ class BasicSkeeball(GameMode):
         #if self.balls in [3,6]:
         #    self.sensor.release_balls()
         self.ticks_last_ball = self.ticks
+        res.SOUNDS[event.button.name].play()

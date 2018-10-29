@@ -11,6 +11,9 @@ class Target(BasicSkeeball):
     ]
 
     def startup(self):
+        self.bg_music = res.TARGET_SFX['TARGET_BG']
+        self.bg_music.set_volume(0.25)
+        self.bg_music.play()
         super(Target,self).startup()
         print("Special Mode: Target")
         self.persist['active_game_mode'] = 'TARGET'
@@ -18,8 +21,6 @@ class Target(BasicSkeeball):
         self.got_bonus = 'idle'
         self.bonus = [100,200,200,300,300,300,400,400,500]
         random.shuffle(self.bonus)
-        self.bg_music = res.GAME_MUSIC['TARGET_BG']
-        self.bg_music.play()
         self.playing_outro = False
 
 
@@ -30,7 +31,7 @@ class Target(BasicSkeeball):
                 self.got_bonus = 'idle'
         if self.balls == 0 and not self.playing_outro:
             self.bg_music.stop()
-            res.GAME_MUSIC['COMPLETE'].play()
+            res.TARGET_SFX['COMPLETE'].play()
 
 
     def add_score(self,score):
@@ -40,10 +41,12 @@ class Target(BasicSkeeball):
             self.score_buffer += 1000
             self.got_bonus = 'yes'
             self.ball_bonuses.append(True)
+            res.TARGET_SFX['TARGET_HIT'].play()
         else:
             self.score_buffer += score
             self.got_bonus = 'no'
             self.ball_bonuses.append(False)
+            res.TARGET_SFX['TARGET_MISS'].play()
         self.advance_score = True
         #if self.balls in [3,6]:
         #    self.sensor.release_balls()
