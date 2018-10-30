@@ -14,7 +14,9 @@ class Target(BasicSkeeball):
         self.bg_music = res.TARGET_SFX['TARGET_BG']
         self.bg_music.set_volume(0.25)
         self.bg_music.play()
+
         super(Target,self).startup()
+
         print("Special Mode: Target")
         self.persist['active_game_mode'] = 'TARGET'
         self.ball_bonuses= []
@@ -32,6 +34,21 @@ class Target(BasicSkeeball):
         if self.balls == 0 and not self.playing_outro:
             self.bg_music.stop()
             res.TARGET_SFX['COMPLETE'].play()
+
+    def handle_event(self,event):
+        if event.button == res.B.QUIT:
+            self.quit = True
+        if self.balls == 0:
+            return 
+        if event.down and event.button in res.POINTS:
+            self.add_score(res.POINTS[event.button])
+        if event.down and event.button == res.B.RETURN:
+            self.returned_balls-=1
+            if self.returned_balls < self.balls:
+                self.add_score(0)
+        if event.button == res.B.CONFIG:
+            self.balls = 0
+            self.returned_balls = 0
 
 
     def add_score(self,score):
