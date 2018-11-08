@@ -54,7 +54,6 @@ class Combo(BasicSkeeball):
         #if self.balls in [3,6]:
         #    self.sensor.release_balls()
         self.ticks_last_ball = self.ticks
-        res.SOUNDS[event.button.name].play()
 
     def draw_panel(self,panel):  
         panel.clear()
