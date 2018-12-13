@@ -38,6 +38,8 @@ SOUNDS = {
     'B500': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
     'B1000L': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
     'B1000R': pygame.mixer.Sound(getfile("sounds/colossus_roar.ogg")),
+    'READY': pygame.mixer.Sound(getfile("sounds/ready.ogg")),
+    'GO': pygame.mixer.Sound(getfile("sounds/go.ogg")),
 }
 
 ATTRACT_MUSIC = {

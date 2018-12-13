@@ -42,6 +42,11 @@ class Speedrun(GameMode):
             self.time_elapsed = 599.0
 
     def update(self):
+        if self.time_elapsed == -2:
+            res.SOUNDS['READY'].play()
+        elif -0.26 < self.time_elapsed and self.time_elapsed < -0.24:
+            res.SOUNDS['GO'].play()
+
         if self.advance_score:
             if self.score_buffer > 0:
                 self.score += 100
