@@ -27,5 +27,7 @@ class GameMode(State):
     has_high_scores = False
     intro_text = [
         "I'M A SKEE-BALL",
-        "MODE!"
+        "MODE!",
+        "ALLAN PLEASE",
+        'ADD DETAILS'
     ]

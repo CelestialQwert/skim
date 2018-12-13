@@ -13,7 +13,8 @@ from .gameover import GameOver
 from .basic_skeeball import BasicSkeeball
 from .target import Target
 from .combo import Combo
-from .speed import Speed
+from .speedrun import Speedrun
+from .timed import Timed
 from .dummy import Dummy
 
 print('init pygame')
@@ -37,10 +38,11 @@ class Manager():
                 "BASIC": BasicSkeeball(manager=self),
                 "TARGET": Target(manager=self),
                 "COMBO": Combo(manager=self),
-                "SPEED": Speed(manager=self),
+                "SPEEDRUN": Speedrun(manager=self),
+                "TIMED": Timed(manager=self),
                 "DUMMY": Dummy(manager=self),
             }
-            self.game_modes = ['BASIC','TARGET','COMBO','SPEED','DUMMY']
+            self.game_modes = ['BASIC','TARGET','COMBO','SPEEDRUN','TIMED','DUMMY']
 
             self.has_high_scores = {}
             for game_mode in self.game_modes:
@@ -75,8 +77,15 @@ class Manager():
         for key,value in temp_settings.items():
             self.settings[key] = value
 
+        self.global_ticks = 0
+        self.sensor.set_repeat(0,0)
+
     def handle_events(self):
         for event in self.sensor.get_events():
+            if isinstance(event,sensor.InputEvent):
+                print('Tick {}, Handling InputEvent, button = {}, down = {}'.format(self.global_ticks,event.button,event.down))
+            else:
+                print('Tick {},Handling event'.format(self.global_ticks),type(event))
             self.state.handle_event(event)
 
     def update(self):
@@ -90,6 +99,7 @@ class Manager():
         #shutdown old state
         self.state.cleanup()
         self.state.done = False
+        print('Ending old state',self.state_name)
         #clear events to prevent buffering
         self.sensor.get_events()
         #switch to new state
@@ -98,11 +108,13 @@ class Manager():
         self.next_state = ''
         self.state = self.states[self.state_name]
         #startup new state
+        print('Starting new state',self.state_name)
         self.state.startup()
 
     def main_loop(self):
         self.state.startup()
         while not self.done:
+            self.global_ticks += 1
             self.clock.tick(res.FPS)
             self.handle_events()
             self.update()

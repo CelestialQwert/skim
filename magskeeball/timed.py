@@ -4,7 +4,7 @@ import random
 import time
 
 
-class Speed(GameMode):
+class Timed(GameMode):
 
     has_high_scores = True
     intro_text = [
@@ -24,7 +24,7 @@ class Speed(GameMode):
 
         self.time_remain = 32.0
 
-        self.persist['active_game_mode'] = 'SPEED'
+        self.persist['active_game_mode'] = 'TIMED'
 
     def handle_event(self,event):
         if event.button == res.B.QUIT:
@@ -66,6 +66,11 @@ class Speed(GameMode):
         panel.draw.text((2,2), "TIME: {:04.1f}".format(display_time),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
         panel.draw.text((2,12), "BALLS: {}".format(self.balls),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
         panel.draw.text((2,22), "SCORE: {}".format(self.score),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+
+        if self.time_remain > 30:
+            panel.draw.text((2,42), "READY...: {:03.1f}".format(self.time_remain-30),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        elif self.time_remain > 28:
+            panel.draw.text((2,42), "GO!",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
 
     def cleanup(self):
         print("Pausing for 1 seconds")

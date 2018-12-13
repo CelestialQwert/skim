@@ -106,7 +106,7 @@ class Attract(State):
         self.draw_high_scores(panel,self.yellow_game)
 
     def draw_high_scores(self,panel,game):
-        title_text = 'HI SCORES - {}'.format(game)
+        title_text = '{} HI SCORES'.format(game)
         x = int(48-len(title_text)*2.5)+1
         panel.draw.text((x,2),title_text,font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
 
