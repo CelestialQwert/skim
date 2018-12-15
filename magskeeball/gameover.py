@@ -40,7 +40,24 @@ class GameOver(State):
         # panel.draw.text((8, 26), "GAME",font=res.FONTS['MAGFest'],fill=res.COLORS['RED'])
         # panel.draw.text((32, 38), "OVER",font=res.FONTS['MAGFest'],fill=res.COLORS['RED'])
         panel.draw.text((3, 34), "GAME OVER",font=res.FONTS['MAGMini'],fill=res.COLORS['RED'])
-        score_x = 17 if self.persist['last_score'] < 10000 else 4
-        panel.draw.text((score_x, 4), "%04d" % self.persist['last_score'] ,font=res.FONTS['Digital16'],fill=res.COLORS['YELLOW'])
+
+        if self.persist['active_game_mode'] == 'SPEEDRUN':
+            display_time = self.persist['last_score']
+
+            minutes = display_time // (60 * res.FPS)
+            seconds = (display_time // res.FPS) % 60
+            fraction = 5 * (display_time % res.FPS)
+
+            panel.draw.text((7, 6), "%01d" % minutes, font=res.FONTS['Digital14'], fill=res.COLORS['YELLOW'])
+            panel.draw.text((28, 6), "%02d" % seconds, font=res.FONTS['Digital14'], fill=res.COLORS['YELLOW'])
+            panel.draw.text((63, 6), "%02d" % fraction, font=res.FONTS['Digital14'], fill=res.COLORS['YELLOW'])
+            panel.draw.rectangle([21, 18, 24, 21],fill=res.COLORS['YELLOW'])
+            panel.draw.rectangle([21, 9, 24, 12],fill=res.COLORS['YELLOW'])
+            panel.draw.rectangle([56, 21, 59, 24],fill=res.COLORS['YELLOW'])
+            
+        else:
+            score_x = 17 if self.score < 10000 else 4
+            panel.draw.text((score_x, 4), "%04d" % self.score ,font=res.FONTS['Digital16'],fill=res.COLORS['YELLOW'])
+        
         if self.ticks % (2*res.FPS) < (1.5*res.FPS):
             panel.draw.text((15,54), "PRESS START",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])

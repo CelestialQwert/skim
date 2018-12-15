@@ -28,11 +28,16 @@ class HighScore(State):
         for their_name,their_score in self.game_high_scores:
             place += 1
             their_score = int(their_score)
-            if self.score > their_score:
+            print('higher',self.score > their_score)
+            print('lower',self.score < their_score)
+            print('mode',self.persist['active_game_mode'] == 'SPEEDRUN')
+            if (self.score > their_score and self.persist['active_game_mode'] != 'SPEEDRUN') \
+            or (self.score < their_score and self.persist['active_game_mode'] == 'SPEEDRUN'):
                 self.new_score = True
                 self.place = place
                 res.SOUNDS['PLACE%d' % self.place].play()
                 return
+
 
     def handle_event(self,event):
         if event.button == res.B.QUIT:
@@ -79,9 +84,29 @@ class HighScore(State):
         if not self.new_score:
             return
         panel.clear()
-        score_x = 17 if self.score < 10000 else 4
-        panel.draw.text((score_x, 4), "%04d" % self.score ,font=res.FONTS['Digital16'],fill=res.COLORS['PURPLE'])
-        panel.draw.text((16,30), "HIGH SCORE!" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+
+        if self.persist['active_game_mode'] == 'SPEEDRUN':
+            display_time = self.persist['last_score']
+
+            minutes = display_time // (60 * res.FPS)
+            seconds = (display_time // res.FPS) % 60
+            fraction = 5 * (display_time % res.FPS)
+
+            panel.draw.text((7, 6), "%01d" % minutes, font=res.FONTS['Digital14'], fill=res.COLORS['PURPLE'])
+            panel.draw.text((28, 6), "%02d" % seconds, font=res.FONTS['Digital14'], fill=res.COLORS['PURPLE'])
+            panel.draw.text((63, 6), "%02d" % fraction, font=res.FONTS['Digital14'], fill=res.COLORS['PURPLE'])
+            panel.draw.rectangle([21, 18, 24, 21],fill=res.COLORS['PURPLE'])
+            panel.draw.rectangle([21, 9, 24, 12],fill=res.COLORS['PURPLE'])
+            panel.draw.rectangle([56, 21, 59, 24],fill=res.COLORS['PURPLE'])
+
+            panel.draw.text((16,30), "GREAT TIME!" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+            
+        else:
+            score_x = 17 if self.score < 10000 else 4
+            panel.draw.text((score_x, 4), "%04d" % self.score ,font=res.FONTS['Digital16'],fill=res.COLORS['PURPLE'])
+            
+            panel.draw.text((16,30), "HIGH SCORE!" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+
         #each line is shown for 3/2 (1.5) seconds
         if self.ticks % 90 < 30:
             panel.draw.text((7,40), "ENTER INITIALS" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
@@ -126,7 +151,10 @@ class HighScore(State):
             archive_file = './high_scores/{}_{}.txt'.format(game_mode,timestamp)
             shutil.move(filename,archive_file)
         with open(filename,'w') as sf:
-            sf.write('MAG,2000\nFES,1600\nTIS,1200\nADO,800\nNUT,400\n')
+            if game_mode == 'SPEEDRUN':
+                sf.write('MAG,1120\nFES,1140\nTIS,1160\nADO,1180\nNUT,1199\n')
+            else:
+                sf.write('MAG,2000\nFES,1600\nTIS,1200\nADO,800\nNUT,400\n')
         os.chmod(filename,0o777)
         return self.load_high_scores(game_mode)
 

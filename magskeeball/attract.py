@@ -106,15 +106,23 @@ class Attract(State):
         self.draw_high_scores(panel,self.yellow_game)
 
     def draw_high_scores(self,panel,game):
-        title_text = '{} HI SCORES'.format(game)
+        if game == 'SPEEDRUN':
+            title_text = '{} TOP TIMES'.format(game)
+        else:
+            title_text = '{} HI SCORES'.format(game)
         x = int(48-len(title_text)*2.5)+1
         panel.draw.text((x,2),title_text,font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
 
         for i,(name,score) in enumerate(self.high_scores[game]):
-            if self.high_scores[game][0][1] > 9999:
-                panel.draw.text((5+8*i,(i+1)*9),'{} {:5d}'.format(name,score),font=res.FONTS['Medium'],fill=HISCORE_COLORS[i])
+            if game == 'SPEEDRUN':
+                seconds = (score // res.FPS) % 60
+                fraction = 5 * (score % res.FPS)
+                panel.draw.text((5+8*i,(i+1)*9),'{} {:2d}.{:02d}'.format(name,seconds,fraction),font=res.FONTS['Medium'],fill=HISCORE_COLORS[i])
             else:
-                panel.draw.text((8+8*i,(i+1)*9),'{} {:4d}'.format(name,score),font=res.FONTS['Medium'],fill=HISCORE_COLORS[i])
+                if self.high_scores[game][0][1] > 9999:
+                    panel.draw.text((5+8*i,(i+1)*9),'{} {:5d}'.format(name,score),font=res.FONTS['Medium'],fill=HISCORE_COLORS[i])
+                else:
+                    panel.draw.text((8+8*i,(i+1)*9),'{} {:4d}'.format(name,score),font=res.FONTS['Medium'],fill=HISCORE_COLORS[i])
 
         # self.panel.draw.text((24,10),'{} {}'.format(name,score),font=FONTS['Medium'],fill=HISCORE_COLORS[0])
         # for i in [1,2,3,4]:
