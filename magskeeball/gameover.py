@@ -56,8 +56,9 @@ class GameOver(State):
             panel.draw.rectangle([56, 21, 59, 24],fill=res.COLORS['YELLOW'])
             
         else:
-            score_x = 17 if self.score < 10000 else 4
-            panel.draw.text((score_x, 4), "%04d" % self.score ,font=res.FONTS['Digital16'],fill=res.COLORS['YELLOW'])
+            score = self.persist['last_score']
+            score_x = 17 if score < 10000 else 4
+            panel.draw.text((score_x, 4), "%04d" % score ,font=res.FONTS['Digital16'],fill=res.COLORS['YELLOW'])
         
         if self.ticks % (2*res.FPS) < (1.5*res.FPS):
             panel.draw.text((15,54), "PRESS START",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
