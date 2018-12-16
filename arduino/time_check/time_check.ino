@@ -8,7 +8,7 @@ bool held;
 int btn;
 
 void setup(){
-  btn = 2;
+  btn = 8;
   pinMode(btn,INPUT_PULLUP);
   Serial.begin(9600);
   held = false;

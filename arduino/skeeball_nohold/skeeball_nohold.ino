@@ -37,6 +37,7 @@ void setup() {
     pinMode(x,INPUT_PULLUP);
   }
   Timer1.initialize(20000);
+  //20,000 us = 20 ms = 50 Hz poll rate
   Timer1.attachInterrupt(buttonHandle);
   Serial.begin(9600);
 }
