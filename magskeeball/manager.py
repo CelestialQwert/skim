@@ -102,6 +102,8 @@ class Manager():
         print('Ending old state',self.state_name)
         #clear events to prevent buffering
         self.sensor.get_events()
+        time.sleep(0.06)
+        self.sensor.get_events()
         #switch to new state
         self.last_state = self.state_name
         self.state_name = self.next_state
