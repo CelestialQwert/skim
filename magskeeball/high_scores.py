@@ -97,7 +97,7 @@ class HighScore(State):
 
             minutes = display_time // (60 * res.FPS)
             seconds = (display_time // res.FPS) % 60
-            fraction = 5 * (display_time % res.FPS)
+            fraction = round( 100.0 / res.FPS * (display_time % res.FPS))
 
             panel.draw.text((7, 6), "%01d" % minutes, font=res.FONTS['Digital14'], fill=res.COLORS['PURPLE'])
             panel.draw.text((28, 6), "%02d" % seconds, font=res.FONTS['Digital14'], fill=res.COLORS['PURPLE'])

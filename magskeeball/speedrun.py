@@ -13,7 +13,7 @@ class Speedrun(GameMode):
     ]
 
     def startup(self):
-        self.score = 0
+        self.score = 5000
         self.score_buffer = 0
         self.advance_score = False
 
@@ -23,12 +23,16 @@ class Speedrun(GameMode):
         self.countdown_time = 3
 
         self.time_elapsed = -self.countdown_time*res.FPS
+        self.timeout = self.settings['timeout']*res.FPS
+        self.time_last_ball = self.time_elapsed
 
         self.persist['active_game_mode'] = 'SPEEDRUN'
 
     def handle_event(self,event):
         if event.button == res.B.QUIT:
             self.quit = True
+        if event.button == res.B.CONFIG:
+            self.time_elapsed = 600*res.FPS - 2
         if self.time_elapsed < 0:
             return
         if event.down and event.button in res.POINTS:
@@ -39,10 +43,10 @@ class Speedrun(GameMode):
             if self.returned_balls > self.balls:
                 self.add_score(0)
                 res.SOUNDS['MISS'].play()
-        if event.button == res.B.CONFIG:
-            self.time_elapsed = 599*res.FPS
+        
 
     def update(self):
+
         if self.time_elapsed == -self.countdown_time*res.FPS:
             res.SOUNDS['READY'].play()
         elif self.time_elapsed == -res.FPS//4: #the sound clip has a delay so this syncs it up
@@ -50,16 +54,23 @@ class Speedrun(GameMode):
 
         if self.advance_score:
             if self.score_buffer > 0:
-                self.score += 100
+                self.score -= 100
                 self.score_buffer -= 100
         if self.score_buffer == 0:
             self.advance_score = False
-        if self.score >= 5000:
+
+        if (self.time_elapsed - self.time_last_ball) > self.timeout:
+            self.time_elapsed = 600*res.FPS - 2
+
+        if self.score <= 0:
             if not self.advance_score:
                 self.manager.next_state = "HIGHSCORE"
                 self.done = True
         else:
             self.time_elapsed += 1
+
+        
+
         if self.time_elapsed >= 599*res.FPS:
             self.manager.next_state = "HIGHSCORE"
             self.done = True
@@ -73,7 +84,7 @@ class Speedrun(GameMode):
 
         minutes = display_time // (60 * res.FPS)
         seconds = (display_time // res.FPS) % 60
-        fraction = 5 * (display_time % res.FPS)
+        fraction = round( 100.0 / res.FPS * (display_time % res.FPS))
 
         panel.draw.text((7, 6), "%01d" % minutes, font=res.FONTS['Digital14'], fill=res.COLORS['PURPLE'])
         panel.draw.text((28, 6), "%02d" % seconds, font=res.FONTS['Digital14'], fill=res.COLORS['PURPLE'])
@@ -85,7 +96,8 @@ class Speedrun(GameMode):
         panel.draw.text((66, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
 
         panel.draw.text((9,31), "SCORE",font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
-        panel.draw.text((12, 41), "%04d" % self.score,font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
+        score = self.score if self.score > 0 else 0
+        panel.draw.text((12, 41), "%04d" % score,font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
 
             
 
@@ -107,5 +119,5 @@ class Speedrun(GameMode):
         self.ball_scores.append(score)
         self.balls+=1
         self.advance_score = True
-        #if self.balls in [3,6]:
-        #    self.sensor.release_balls()
+        self.time_last_ball = self.time_elapsed
+

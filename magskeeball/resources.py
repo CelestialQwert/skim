@@ -67,7 +67,7 @@ ATTRACT_MUSIC_KEYS = list(ATTRACT_MUSIC.keys())
 START_MUSIC_KEYS = list(START_MUSIC.keys())
 
 
-FPS = 20
+FPS = 35
 
 #these map to the physical pins on the arduino except QUIT
 class Button(Enum):

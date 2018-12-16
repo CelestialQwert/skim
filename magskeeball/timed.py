@@ -29,6 +29,8 @@ class Timed(GameMode):
     def handle_event(self,event):
         if event.button == res.B.QUIT:
             self.quit = True
+        if event.button == res.B.CONFIG:
+            self.time_remain = 0.0
         if self.time_remain > 30:
             return
         if event.down and event.button in res.POINTS:
@@ -39,8 +41,7 @@ class Timed(GameMode):
             if self.returned_balls > self.balls:
                 self.add_score(0)
                 res.SOUNDS['MISS'].play()
-        if event.button == res.B.CONFIG:
-            self.time_remain = 0.0
+        
 
     def update(self):
         if self.advance_score:
