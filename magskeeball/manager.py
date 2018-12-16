@@ -108,7 +108,10 @@ class Manager():
         self.state.done = False
         print('Ending old state',self.state_name)
         #clear events to prevent buffering
+        #sleep prevents weird bug where an extra buttonup and buttondown event are generated
+        time.sleep(1/res.FPS)
         self.sensor.get_events()
+        time.sleep(1/res.FPS)
         #switch to new state
         self.last_state = self.state_name
         self.state_name = self.next_state
