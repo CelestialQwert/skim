@@ -106,10 +106,12 @@ class Sensor:
             arduino_buttons = int.from_bytes(arduino_data,byteorder='little')
             return [arduino_buttons & 2**i for i in range(NUM_BUTTONS)]
         else:
-            return [False]*NUM_BUTTONS
+            return [0]*NUM_BUTTONS
 
     def update_arduino(self):
         new_arduino = self.get_arduino_buttons()
+        if max(new_arduino) > 0:
+            print(new_arduino)
         for i,(pressed,held) in enumerate(zip(new_arduino,self.arduino_buttons)):
             if pressed and not held:
                 ev = pygame.event.Event(ARDUINODOWN,button=B(i))

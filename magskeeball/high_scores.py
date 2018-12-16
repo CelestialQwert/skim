@@ -15,6 +15,16 @@ class HighScore(State):
     def startup(self):
         self.manager.next_state = 'GAMEOVER'
         self.active_game_mode = self.persist['active_game_mode']
+
+        print('old list',self.persist['hs_game_hist'])
+        self.persist['hs_game_hist'] = [self.active_game_mode] + self.persist['hs_game_hist']
+        temp_hist = []
+        for game in self.persist['hs_game_hist']:
+            if game not in temp_hist:
+                temp_hist.append(game)
+        self.persist['hs_game_hist'] = temp_hist[:2]
+        print('new list',self.persist['hs_game_hist'])
+
         self.score = self.persist['last_score']
         self.game_high_scores = self.high_scores[self.active_game_mode]
 
@@ -28,9 +38,6 @@ class HighScore(State):
         for their_name,their_score in self.game_high_scores:
             place += 1
             their_score = int(their_score)
-            print('higher',self.score > their_score)
-            print('lower',self.score < their_score)
-            print('mode',self.persist['active_game_mode'] == 'SPEEDRUN')
             if (self.score > their_score and self.persist['active_game_mode'] != 'SPEEDRUN') \
             or (self.score < their_score and self.persist['active_game_mode'] == 'SPEEDRUN'):
                 self.new_score = True
@@ -111,9 +118,9 @@ class HighScore(State):
         if self.ticks % 90 < 30:
             panel.draw.text((7,40), "ENTER INITIALS" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
         elif self.ticks % 90 < 60:
-            panel.draw.text((4,40), "YELLOW = CHANGE" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+            panel.draw.text((3,40), "YELLOW = CHANGE" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
         else:
-            panel.draw.text((19,40), "RED = PICK" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+            panel.draw.text((18,40), "RED = PICK" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
         panel.draw.text((39,50), self.name ,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
         if self.ticks % 4 < 3 and len(self.name) < 4:
             #blink current letter

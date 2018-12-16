@@ -1,5 +1,6 @@
 import sys
 import pygame
+import time
 
 from . import panel
 from . import sensor
@@ -16,6 +17,7 @@ from .combo import Combo
 from .speedrun import Speedrun
 from .timed import Timed
 from .dummy import Dummy
+from .game_menu import GameMenu
 
 print('init pygame')
 pygame.init()
@@ -41,12 +43,16 @@ class Manager():
                 "SPEEDRUN": Speedrun(manager=self),
                 "TIMED": Timed(manager=self),
                 "DUMMY": Dummy(manager=self),
+                "GAMEMENU": GameMenu(manager=self),
             }
-            self.game_modes = ['BASIC','TARGET','COMBO','SPEEDRUN','TIMED','DUMMY']
+            self.game_modes = ['BASIC','TARGET','COMBO','SPEEDRUN','TIMED']
+            self.selectable_modes = self.game_modes + ['DUMMY','GAMEMENU']
 
             self.has_high_scores = {}
-            for game_mode in self.game_modes:
+            for game_mode in self.selectable_modes:
                 self.has_high_scores[game_mode] = self.states[game_mode].has_high_scores
+            self.has_high_scores['SETTINGS'] = False
+
         else:
             self.states = {}
             for state in states:
@@ -66,7 +72,8 @@ class Manager():
         self.settings['save_high_scores'] = True
         self.settings['debug'] = False
 
-        self.persist['last_color'] = 'none'
+        self.persist['hs_game_hist'] = ['BASIC']
+        self.persist['active_game_mode'] = 'DUMMY'
 
         self.last_state = ''
         self.next_state = ''
@@ -101,8 +108,6 @@ class Manager():
         self.state.done = False
         print('Ending old state',self.state_name)
         #clear events to prevent buffering
-        self.sensor.get_events()
-        time.sleep(0.06)
         self.sensor.get_events()
         #switch to new state
         self.last_state = self.state_name

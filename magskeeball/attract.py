@@ -18,9 +18,10 @@ class Attract(State):
         self.red_game = self.settings['red_game']
         self.yellow_game = self.settings['yellow_game']
         self.high_scores = self.manager.high_scores
+        self.game_modes = self.manager.game_modes
         self.has_high_scores = self.manager.has_high_scores            
         if not self.settings['save_high_scores']:
-            self.display_queue = [self.draw_logo]
+            self.display_queue = [self.draw_factory('LOGO')]
         else:
             self.display_queue = self.get_display_queue()
         self.current_display_ticks = 0
@@ -28,51 +29,49 @@ class Attract(State):
         self.current_display = 0
         self.attract_song = res.ATTRACT_MUSIC[random.choice(res.ATTRACT_MUSIC_KEYS)]
 
-
     def get_display_queue(self):
-        queue = []
-        if self.persist['last_color'] == 'red':
-            if self.has_high_scores[self.red_game]:
-                queue.append((self.draw_red_scores,10))
-            queue.append((self.draw_logo,10))
-            if self.has_high_scores[self.yellow_game]:
-                queue.append((self.draw_yellow_scores,10))
-                if queue[0] != self.draw_logo:
-                    queue.append((self.draw_logo,10))
-        elif self.persist['last_color'] == 'yellow':
-            if self.has_high_scores[self.yellow_game]:
-                queue.append((self.draw_yellow_scores,10))
-            queue.append((self.draw_logo,10))
-            if self.has_high_scores[self.red_game]:
-                queue.append((self.draw_red_scores,10))
-                if queue[0] != self.draw_logo:
-                    queue.append((self.draw_logo,10))
+        if len(self.persist['hs_game_hist']) == 2:
+            game1,game2 = self.persist['hs_game_hist']
         else:
-            if self.has_high_scores[self.red_game]:
-                queue.append((self.draw_logo,10))
-                queue.append((self.draw_red_scores,10))
-            if self.has_high_scores[self.yellow_game]:
-                queue.append((self.draw_logo,10))
-                queue.append((self.draw_yellow_scores,10))
-            if queue == []:
-                queue.append((self.draw_logo,10))
+            game1 = game2 = self.persist['hs_game_hist'][0]
+        queue = []
+        if not self.has_high_scores[self.persist['active_game_mode']]:
+            queue.append((self.draw_factory('LOGO'),10))
+        queue.append((self.draw_factory(game1),10))
+        queue.append((self.draw_factory('LOGO'),10))
+        queue.append((self.draw_factory(game2),10))
+        if self.has_high_scores[self.persist['active_game_mode']]:
+            queue.append((self.draw_factory('LOGO'),10))
         return queue
+
+
+    def draw_factory(self,mode):
+        if mode == 'LOGO':
+            def draw_func(panel):
+                panel.paste(res.IMAGES['MainLogo'],(0,5))
+        else:
+            def draw_func(panel):
+                self.draw_high_scores(panel,mode)
+        return draw_func
+
 
     def handle_event(self,event):
         if event.button == res.B.START and event.down:
-            self.manager.next_state = 'INTRO'
-            self.persist['active_game_mode'] = self.red_game
-            self.persist['last_color'] = 'red'
-            self.done = True
+            self.activate_new_mode(self.red_game)
         elif event.button == res.B.SELECT and event.down:
-            self.manager.next_state = 'INTRO'
-            self.persist['active_game_mode'] = self.yellow_game
-            self.persist['last_color'] = 'yellow'
-            self.done = True
+            self.activate_new_mode(self.yellow_game)
+
         elif event.button == res.B.CONFIG and event.down:
-            self.manager.next_state = 'SETTINGS'
-            self.persist['last_color'] = 'settings'
-            self.done = True
+            self.activate_new_mode('SETTINGS')
+
+    def activate_new_mode(self,mode):
+        if mode in self.game_modes:
+            self.manager.next_state = 'INTRO'
+            self.persist['active_game_mode'] = mode
+        else:
+            self.manager.next_state = mode
+        self.done = True
+
 
     def update(self):
         self.ticks += 1
@@ -95,15 +94,6 @@ class Attract(State):
 
         if self.ticks % (2*res.FPS) < (1.5*res.FPS):
             panel.draw.text((15,54), "PRESS START",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
-
-    def draw_logo(self,panel):
-        panel.paste(res.IMAGES['MainLogo'],(0,5))
-
-    def draw_red_scores(self,panel):
-        self.draw_high_scores(panel,self.red_game)
-
-    def draw_yellow_scores(self,panel):
-        self.draw_high_scores(panel,self.yellow_game)
 
     def draw_high_scores(self,panel,game):
         if game == 'SPEEDRUN':
@@ -128,6 +118,6 @@ class Attract(State):
         # for i in [1,2,3,4]:
         #     (name,score) = game.high_scores[i]
         #     self.panel.draw.text((28,i*8+12),'{} {}'.format(name,score),font=FONTS['Small'],fill=HISCORE_COLORS[i])
-
+    
     def cleanup(self):
         self.attract_song.stop()

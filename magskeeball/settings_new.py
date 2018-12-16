@@ -41,9 +41,11 @@ class Settings(State):
 
     def startup(self):
         self.cur_loc = 0
+        self.screen = 'MAIN'
         self.manager.next_state = 'ATTRACT'
         self.persist['active_game_mode'] = 'SETTINGS'
         self.settings['erase_high_scores'] = False
+
 
     def handle_event(self,event):
         if event.button == res.B.START and event.down:

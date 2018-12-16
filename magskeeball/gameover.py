@@ -8,37 +8,35 @@ class GameOver(State):
 
     def startup(self):
         self.ticks = 0
+        self.game_modes = self.manager.game_modes
         self.red_game = self.settings['red_game']
         self.yellow_game = self.settings['yellow_game']
 
     def handle_event(self,event):
         if event.button == res.B.START and event.down:
-            self.manager.next_state = 'INTRO'
-            self.persist['active_game_mode'] = self.red_game
-            self.persist['last_color'] = 'red'
-            self.done = True
+            self.activate_new_mode(self.red_game)
         elif event.button == res.B.SELECT and event.down:
-            self.manager.next_state = 'INTRO'
-            self.persist['active_game_mode'] = self.yellow_game
-            self.persist['last_color'] = 'yellow'
-            self.done = True
+            self.activate_new_mode(self.yellow_game)
+
         elif event.button == res.B.CONFIG and event.down:
-            self.manager.next_state = 'ATTRACT'
-            self.done = True
+            self.activate_new_mode('ATTRACT')
+
+    def activate_new_mode(self,mode):
+        if mode in self.game_modes:
+            self.manager.next_state = 'INTRO'
+            self.persist['active_game_mode'] = mode
+        else:
+            self.manager.next_state = mode
+        self.done = True
 
     def update(self):
         self.ticks += 1
-        if self.ticks >= res.FPS * 10:
+        if self.ticks >= res.FPS * 5:
             self.manager.next_state = 'ATTRACT'
             self.done = True
 
     def draw_panel(self,panel):
         panel.clear()
-        #panel.draw.text((0,0), self.name ,font=FONTS['Tiny'],fill=COLORS.GREEN)
-#        panel.draw.text((8, 26), "GAME",font=res.FONTS['GameOver'],fill=res.COLORS['RED'])
-#        panel.draw.text((25, 39), "OVER",font=res.FONTS['GameOver'],fill=res.COLORS['RED'])
-        # panel.draw.text((8, 26), "GAME",font=res.FONTS['MAGFest'],fill=res.COLORS['RED'])
-        # panel.draw.text((32, 38), "OVER",font=res.FONTS['MAGFest'],fill=res.COLORS['RED'])
         panel.draw.text((3, 34), "GAME OVER",font=res.FONTS['MAGMini'],fill=res.COLORS['RED'])
 
         if self.persist['active_game_mode'] == 'SPEEDRUN':
