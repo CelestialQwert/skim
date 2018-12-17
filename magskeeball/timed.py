@@ -21,8 +21,9 @@ class Timed(GameMode):
         self.balls = 0
         self.returned_balls = 0
         self.ball_scores = []
+        self.countdown_time = 3
 
-        self.time_remain = 32.0
+        self.time_remain = (30+self.countdown_time)*res.FPS
 
         self.persist['active_game_mode'] = 'TIMED'
 
@@ -30,8 +31,8 @@ class Timed(GameMode):
         if event.button == res.B.QUIT:
             self.quit = True
         if event.button == res.B.CONFIG:
-            self.time_remain = 0.0
-        if self.time_remain > 30:
+            self.time_remain = 0
+        if self.time_remain > 30*res.FPS:
             return
         if event.down and event.button in res.POINTS:
             self.add_score(res.POINTS[event.button])
@@ -50,28 +51,37 @@ class Timed(GameMode):
                 self.score_buffer -= 100
         if self.score_buffer == 0:
             self.advance_score = False
-        self.time_remain -= 1 / res.FPS
+        self.time_remain -= 1
         if self.time_remain <= 0 and not self.advance_score:
             self.manager.next_state = "HIGHSCORE"
             self.done = True
 
     def draw_panel(self,panel):
         panel.clear()
-        if self.time_remain > 30:
-            display_time = 30.0
+        if self.time_remain > 30*res.FPS:
+            display_time = 30*res.FPS
         elif self.time_remain < 0:
-            display_time = 0.0
+            display_time = 0
         else:
             display_time = self.time_remain
 
-        panel.draw.text((2,2), "TIME: {:04.1f}".format(display_time),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
-        panel.draw.text((2,12), "BALLS: {}".format(self.balls),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
-        panel.draw.text((2,22), "SCORE: {}".format(self.score),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        seconds = (display_time // res.FPS) % 60
+        fraction = round( 100.0 / res.FPS * (display_time % res.FPS))
 
-        if self.time_remain > 30:
-            panel.draw.text((2,42), "READY...: {:03.1f}".format(self.time_remain-30),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
-        elif self.time_remain > 28:
-            panel.draw.text((2,42), "GO!",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        score_x = 17 if self.score < 10000 else 4
+        panel.draw.text((score_x, 4), "%04d" % self.score ,font=res.FONTS['Digital16'],fill=res.COLORS['PURPLE'])
+            
+        panel.draw.text((57,31), "BALLS" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+        panel.draw.text((66, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+        panel.draw.text((12,31), "TIME",font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
+        panel.draw.text((9, 41), "{:02}.{:02}".format(seconds,fraction),font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
+
+        if self.time_remain > 30*res.FPS:
+            display_time = self.time_remain - 30*res.FPS
+            seconds = (display_time // res.FPS) % 60 + 1
+            panel.draw.text((15,54), "READY... {:1}".format(seconds),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        elif self.time_remain > 28*res.FPS:
+            panel.draw.text((39,54), "GO!",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
 
     def cleanup(self):
         print("Pausing for 1 seconds")
@@ -84,5 +94,3 @@ class Timed(GameMode):
         self.ball_scores.append(score)
         self.balls+=1
         self.advance_score = True
-        #if self.balls in [3,6]:
-        #    self.sensor.release_balls()
