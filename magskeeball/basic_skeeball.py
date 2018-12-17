@@ -6,7 +6,7 @@ class BasicSkeeball(GameMode):
 
     has_high_scores = True
     intro_text = [
-        "NO FANCY STUFF..."
+        "NO FANCY STUFF...",
         "THE SKEE-BALL YOU",
         "KNOW AND LOVE"
     ]

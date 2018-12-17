@@ -23,6 +23,8 @@ class Timed(GameMode):
         self.ball_scores = []
         self.countdown_time = 3
 
+        self.debug = self.settings['debug']
+
         self.time_remain = (30+self.countdown_time)*res.FPS
 
         self.persist['active_game_mode'] = 'TIMED'
@@ -45,6 +47,12 @@ class Timed(GameMode):
         
 
     def update(self):
+        if self.time_remain == (30+self.countdown_time)*res.FPS:
+            res.SOUNDS['READY'].play()
+        elif self.time_remain == int(30.25*res.FPS) : #the sound clip has a delay so this syncs it up
+            res.SOUNDS['GO'].play()
+
+
         if self.advance_score:
             if self.score_buffer > 0:
                 self.score += 100
@@ -82,6 +90,15 @@ class Timed(GameMode):
             panel.draw.text((15,54), "READY... {:1}".format(seconds),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
         elif self.time_remain > 28*res.FPS:
             panel.draw.text((39,54), "GO!",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+
+        if self.debug:
+            for i,num in enumerate(self.ball_scores[-9:]):
+                num = str(num)
+                t = 4*len(num)
+                panel.draw.text((96-t,1+6*i),num,font=res.FONTS['Tiny'],fill=res.COLORS['RED'])
+            panel.draw.text((85,57), "{:02}".format(self.returned_balls),font=res.FONTS['Small'],fill=res.COLORS['ORANGE'])
+
+
 
     def cleanup(self):
         print("Pausing for 1 seconds")

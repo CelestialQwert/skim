@@ -21,6 +21,8 @@ class Speedrun(GameMode):
         self.returned_balls = 0
         self.ball_scores = []
         self.countdown_time = 3
+        
+        self.debug = self.settings['debug']
 
         self.time_elapsed = -self.countdown_time*res.FPS
         self.timeout = self.settings['timeout']*res.FPS
@@ -107,6 +109,15 @@ class Speedrun(GameMode):
             panel.draw.text((15,54), "READY... {:1}".format(seconds),font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
         elif self.time_elapsed < 2*res.FPS:
             panel.draw.text((39,54), "GO!",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+
+        if self.debug:
+            for i,num in enumerate(self.ball_scores[-9:]):
+                num = str(num)
+                t = 4*len(num)
+                panel.draw.text((96-t,1+6*i),num,font=res.FONTS['Tiny'],fill=res.COLORS['RED'])
+            panel.draw.text((85,57), "{:02}".format(self.returned_balls),font=res.FONTS['Small'],fill=res.COLORS['ORANGE'])
+
+
 
     def cleanup(self):
         print("Pausing for 1 seconds")
