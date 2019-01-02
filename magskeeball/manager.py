@@ -1,6 +1,7 @@
 import sys
 import pygame
 import time
+import json
 
 from . import panel
 from . import sensor
@@ -78,6 +79,17 @@ class Manager():
         self.last_state = ''
         self.next_state = ''
 
+        try:
+            with open('high_scores/game_log.txt','r') as game_log_file:
+                self.game_log = json.loads(game_log_file.read())
+        except:
+            print('loading game log failed, remaking')
+            self.game_log = {}
+            for game in self.game_modes:
+                self.game_log[game] = 0
+            with open('high_scores/game_log.txt','w') as game_log_file:
+                game_log_file.write(json.dumps(self.game_log))
+
         self.high_scores = self.states['HIGHSCORE'].load_all_high_scores()
         #lol mutable
         temp_settings = self.states['SETTINGS'].load_settings()
@@ -115,6 +127,11 @@ class Manager():
         #switch to new state
         self.last_state = self.state_name
         self.state_name = self.next_state
+        if self.state_name in self.game_modes:
+            self.game_log[self.state_name] += 1
+            with open('high_scores/game_log.txt','w') as game_log_file:
+                game_log_file.write(json.dumps(self.game_log))
+
         self.next_state = ''
         self.state = self.states[self.state_name]
         #startup new state

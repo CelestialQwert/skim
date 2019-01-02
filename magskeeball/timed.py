@@ -52,6 +52,8 @@ class Timed(GameMode):
         elif self.time_remain == int(30.25*res.FPS) : #the sound clip has a delay so this syncs it up
             res.SOUNDS['GO'].play()
 
+        if self.advance_score and self.score == 9100:
+            res.SOUNDS['OVER9000'].play()
 
         if self.advance_score:
             if self.score_buffer > 0:
@@ -79,10 +81,19 @@ class Timed(GameMode):
         score_x = 17 if self.score < 10000 else 4
         panel.draw.text((score_x, 4), "%04d" % self.score ,font=res.FONTS['Digital16'],fill=res.COLORS['PURPLE'])
             
-        panel.draw.text((57,31), "BALLS" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
-        panel.draw.text((66, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
-        panel.draw.text((12,31), "TIME",font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
-        panel.draw.text((9, 41), "{:02}.{:02}".format(seconds,fraction),font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
+        panel.draw.text((57,31), "BALLS" ,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        panel.draw.text((66, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+
+        if self.time_remain < 3*res.FPS:
+            time_color = res.COLORS['RED']
+        elif self.time_remain < 10*res.FPS:
+            time_color = res.COLORS['YELLOW']
+        else:
+            time_color = res.COLORS['GREEN']
+
+
+        panel.draw.text((12,31), "TIME",font=res.FONTS['Medium'],fill=time_color)
+        panel.draw.text((9, 41), "{:02}.{:02}".format(seconds,fraction),font=res.FONTS['Medium'],fill=time_color)
 
         if self.time_remain > 30*res.FPS:
             display_time = self.time_remain - 30*res.FPS

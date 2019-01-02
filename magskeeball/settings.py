@@ -44,44 +44,66 @@ class Settings(State):
         self.manager.next_state = 'ATTRACT'
         self.persist['active_game_mode'] = 'SETTINGS'
         self.settings['erase_high_scores'] = False
+        self.page = 0
 
     def handle_event(self,event):
-        if event.button == res.B.START and event.down:
-            #if self.cur_loc == len(options):
-            #    self.done = True
-            #    return
-            key = options[self.cur_loc]
-            if settings_type[key] == 'boolean':
-                self.settings[key] = not(self.settings[key])
-            if settings_type[key] == 'game':
-                spot = self.game_modes.index(self.settings[key])
-                spot = (spot + 1) % len(self.game_modes)
-                self.settings[key] = self.game_modes[spot]
-            if settings_type[key] == 'timeout':
-                spot = times.index(self.settings[key])
-                spot = (spot + 1) % len(times)
-                self.settings[key] = times[spot]
-        if  event.button == res.B.SELECT and event.down:
-            self.cur_loc = (self.cur_loc+1)%(len(options))
-        if  event.button == res.B.CONFIG and event.down:
+        if self.page == 0:
+            if event.button == res.B.START and event.down:
+                #if self.cur_loc == len(options):
+                #    self.done = True
+                #    return
+                key = options[self.cur_loc]
+                if settings_type[key] == 'boolean':
+                    self.settings[key] = not(self.settings[key])
+                if settings_type[key] == 'game':
+                    spot = self.game_modes.index(self.settings[key])
+                    spot = (spot + 1) % len(self.game_modes)
+                    self.settings[key] = self.game_modes[spot]
+                if settings_type[key] == 'timeout':
+                    spot = times.index(self.settings[key])
+                    spot = (spot + 1) % len(times)
+                    self.settings[key] = times[spot]
+            if  event.button == res.B.SELECT and event.down:
+                self.cur_loc = (self.cur_loc+1)%(len(options))
+        if event.button == res.B.CONFIG and event.down:
+            self.page += 1
+
+    def update(self):
+        if self.page > 1:
             self.done = True
 
     def draw_panel(self,panel):
+        if self.done:
+            self.draw_end(panel)
+        elif self.page == 0:
+            self.draw_settings(panel)
+        else:
+            self.draw_stats(panel)
+
+    def draw_stats(self,panel):
+        panel.clear()
+        panel.draw.text((8,1), 'GAME STATS',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
+        for i,(game,plays) in enumerate(self.manager.game_log.items()):
+            alltext = '{:9}{:4d}'.format(game,plays)
+            panel.draw.text((6,12+8*i), alltext,font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
+
+    def draw_settings(self,panel):
         panel.clear()
         panel.draw.text((8,1), 'SKEE-BALL CONFIG',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
-        if not self.done:
-            for i,key in enumerate(options):
-                if settings_type[key] == 'boolean':
-                    setting_text = 'YES' if self.settings[key] else 'NO'
-                else:
-                    setting_text = 'NONE' if self.settings[key] == 9999 else str(self.settings[key])
-                alltext = '{}: {}'.format(settings_desc_text[key],setting_text)
-                panel.draw.text((6,12+8*i), alltext,font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
-            panel.draw.text((0,12+8*self.cur_loc), '>',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
-        else:
-            panel.draw.text((8,20), 'SETTINGS SAVED!',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
-            if self.settings['erase_high_scores']:
-                panel.draw.text((8,28), 'HI SCORES ERASED',font=res.FONTS['Small'],fill=res.COLORS['RED'])
+        for i,key in enumerate(options):
+            if settings_type[key] == 'boolean':
+                setting_text = 'YES' if self.settings[key] else 'NO'
+            else:
+                setting_text = 'NONE' if self.settings[key] == 9999 else str(self.settings[key])
+            alltext = '{}: {}'.format(settings_desc_text[key],setting_text)
+            panel.draw.text((6,12+8*i), alltext,font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
+        panel.draw.text((0,12+8*self.cur_loc), '>',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
+
+    def draw_end(self,panel):
+        panel.celar()
+        panel.draw.text((8,20), 'SETTINGS SAVED!',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
+        if self.settings['erase_high_scores']:
+            panel.draw.text((8,28), 'HI SCORES ERASED',font=res.FONTS['Small'],fill=res.COLORS['RED'])
 
     def cleanup(self):
         if self.settings.pop('erase_high_scores'):

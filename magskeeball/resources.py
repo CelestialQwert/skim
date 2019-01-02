@@ -53,6 +53,7 @@ START_MUSIC = {
     'FIRE': pygame.mixer.Sound(getfile("sounds/great_balls_of_fire.ogg")),
     'WRECKING': pygame.mixer.Sound(getfile("sounds/wrecking_ball.ogg")),
     'STEEL': pygame.mixer.Sound(getfile("sounds/balls_of_steel.ogg")),
+    'BIGBALLS': pygame.mixer.Sound(getfile("sounds/big_balls.ogg")),
 }
 
 TARGET_SFX = {
