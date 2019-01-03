@@ -19,6 +19,7 @@ from .speedrun import Speedrun
 from .battle_royale import BattleRoyale
 from .timed import Timed
 from .dummy import Dummy
+from .debug import Debug
 from .game_menu import GameMenu
 
 print('init pygame')
@@ -46,10 +47,11 @@ class Manager():
                 "TIMED": Timed(manager=self),
                 "ROYALE": BattleRoyale(manager=self),
                 "DUMMY": Dummy(manager=self),
+                "DEBUG": Debug(manager=self),
                 "GAMEMENU": GameMenu(manager=self),
             }
             self.game_modes = ['BASIC','TARGET','COMBO','SPEEDRUN','TIMED','ROYALE']
-            self.selectable_modes = self.game_modes + ['DUMMY','GAMEMENU']
+            self.selectable_modes = self.game_modes + ['DUMMY','DEBUG','GAMEMENU']
 
             self.has_high_scores = {}
             for game_mode in self.selectable_modes:
