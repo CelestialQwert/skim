@@ -114,6 +114,7 @@ class Settings(State):
 
     def erase_high_scores(self):
         self.manager.high_scores = self.manager.states['HIGHSCORE'].init_all_high_scores()
+        self.manager.game_log = self.manager.states['HIGHSCORE'].init_game_log()
 
     def save_settings(self):
         with open('config.json','w') as config_json_file:
