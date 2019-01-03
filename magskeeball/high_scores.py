@@ -3,6 +3,7 @@ from . import resources as res
 import os
 import time
 import shutil
+import json
 
 LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ._<%'
 
@@ -147,6 +148,39 @@ class HighScore(State):
             if self.manager.states[game_mode].has_high_scores:
                 self.high_scores[game_mode] = self.init_high_scores(game_mode)
         return self.high_scores
+
+    def init_game_log(self):
+        filename = './high_scores/game_log.txt'
+        if not os.path.isdir('./high_scores'):
+            os.mkdir('./high_scores')
+            os.chmod('./high_scores',0o777)
+        if os.path.isfile(filename):
+            timestamp = time.strftime('%Y-%m-%d_%H-%M-%S')
+            archive_file = './high_scores/game_log_{}.txt'.format(timestamp)
+            shutil.move(filename,archive_file)
+        game_log = {}
+        for game in self.manager.game_modes:
+            game_log[game] = 0
+        with open('high_scores/game_log.txt','w') as game_log_file:
+            game_log_file.write(json.dumps(game_log))
+        os.chmod(filename,0o777)
+        return self.load_game_log()
+
+        return self.load_high_scores(game_mode)
+
+    def load_game_log(self):
+        filename = './high_scores/game_log.txt'
+        try:
+            with open(filename,'r') as game_log_file:
+                return json.loads(game_log_file.read())
+        except:
+            print('loading game log failed, remaking')
+            return self.init_game_log()
+
+
+    def save_game_log(self):
+        with open('high_scores/game_log.txt','w') as game_log_file:
+            game_log_file.write(json.dumps(self.manager.game_log))
 
     def init_high_scores(self,game_mode):
         filename = './high_scores/{}.txt'.format(game_mode)

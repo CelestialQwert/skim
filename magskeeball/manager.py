@@ -81,16 +81,8 @@ class Manager():
         self.last_state = ''
         self.next_state = ''
 
-        try:
-            with open('high_scores/game_log.txt','r') as game_log_file:
-                self.game_log = json.loads(game_log_file.read())
-        except:
-            print('loading game log failed, remaking')
-            self.game_log = {}
-            for game in self.game_modes:
-                self.game_log[game] = 0
-            with open('high_scores/game_log.txt','w') as game_log_file:
-                game_log_file.write(json.dumps(self.game_log))
+        self.game_log = self.states['HIGHSCORE'].load_game_log()
+        print(self.game_log)
 
         self.high_scores = self.states['HIGHSCORE'].load_all_high_scores()
         #lol mutable
@@ -135,8 +127,7 @@ class Manager():
             except:
                 temp_plays = 0
             self.game_log[self.state_name] = temp_plays + 1
-            with open('high_scores/game_log.txt','w') as game_log_file:
-                game_log_file.write(json.dumps(self.game_log))
+            self.states['HIGHSCORE'].save_game_log()
 
         self.next_state = ''
         self.state = self.states[self.state_name]
