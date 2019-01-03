@@ -16,6 +16,7 @@ from .basic_skeeball import BasicSkeeball
 from .target import Target
 from .combo import Combo
 from .speedrun import Speedrun
+from .battle_royale import BattleRoyale
 from .timed import Timed
 from .dummy import Dummy
 from .game_menu import GameMenu
@@ -43,10 +44,11 @@ class Manager():
                 "COMBO": Combo(manager=self),
                 "SPEEDRUN": Speedrun(manager=self),
                 "TIMED": Timed(manager=self),
+                "ROYALE": BattleRoyale(manager=self),
                 "DUMMY": Dummy(manager=self),
                 "GAMEMENU": GameMenu(manager=self),
             }
-            self.game_modes = ['BASIC','TARGET','COMBO','SPEEDRUN','TIMED']
+            self.game_modes = ['BASIC','TARGET','COMBO','SPEEDRUN','TIMED','ROYALE']
             self.selectable_modes = self.game_modes + ['DUMMY','GAMEMENU']
 
             self.has_high_scores = {}
@@ -128,7 +130,11 @@ class Manager():
         self.last_state = self.state_name
         self.state_name = self.next_state
         if self.state_name in self.game_modes:
-            self.game_log[self.state_name] += 1
+            try:
+                temp_plays = self.game_log[self.state_name]
+            except:
+                temp_plays = 0
+            self.game_log[self.state_name] = temp_plays + 1
             with open('high_scores/game_log.txt','w') as game_log_file:
                 game_log_file.write(json.dumps(self.game_log))
 
