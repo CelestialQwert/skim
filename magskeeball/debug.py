@@ -28,7 +28,7 @@ class Debug(GameMode):
     def handle_event(self,event):
         if event.button == res.B.QUIT:
             self.quit = True
-        if event.button in [res.B.CONFIG,res.B.START,res.B.SELECT]:
+        if event.down and event.button in [res.B.CONFIG,res.B.START,res.B.SELECT]:
             self.done = True
             self.manager.next_state = "GAMEOVER"
         if event.down and event.button in res.POINTS:
