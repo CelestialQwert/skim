@@ -39,8 +39,8 @@ class HighScore(State):
         for their_name,their_score in self.game_high_scores:
             place += 1
             their_score = int(their_score)
-            if (self.score > their_score and self.persist['active_game_mode'] != 'SPEEDRUN') \
-            or (self.score < their_score and self.persist['active_game_mode'] == 'SPEEDRUN'):
+            if (self.score > their_score and 'SPEED' not in self.persist['active_game_mode']) \
+            or (self.score < their_score and 'SPEED' in self.persist['active_game_mode']):
                 self.new_score = True
                 self.place = place
                 res.SOUNDS['PLACE%d' % self.place].play()
@@ -93,7 +93,7 @@ class HighScore(State):
             return
         panel.clear()
 
-        if self.persist['active_game_mode'] == 'SPEEDRUN':
+        if 'SPEED' in self.persist['active_game_mode']:
             display_time = self.persist['last_score']
 
             minutes = display_time // (60 * res.FPS)
@@ -192,8 +192,8 @@ class HighScore(State):
             archive_file = './high_scores/{}_{}.txt'.format(game_mode,timestamp)
             shutil.move(filename,archive_file)
         with open(filename,'w') as sf:
-            if game_mode == 'SPEEDRUN':
-                sf.write('MAG,1120\nFES,1140\nTIS,1160\nADO,1180\nNUT,1199\n')
+            if 'SPEED' in game_mode:
+                sf.write('MAG,1195\nFES,1196\nTIS,1197\nADO,1198\nNUT,1199\n')
             else:
                 sf.write('MAG,2000\nFES,1600\nTIS,1200\nADO,800\nNUT,400\n')
         os.chmod(filename,0o777)

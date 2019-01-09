@@ -39,7 +39,7 @@ class Speedrun(GameMode):
             return
         if event.down and event.button in res.POINTS:
             self.add_score(res.POINTS[event.button])
-            res.SOUNDS[event.button.name].play()
+            self.last_sound = res.SOUNDS[event.button.name].play()
         if event.down and event.button == res.B.RETURN:
             self.returned_balls+=1
             if self.returned_balls > self.balls:
@@ -94,12 +94,19 @@ class Speedrun(GameMode):
         panel.draw.rectangle([21, 18, 24, 21],fill=res.COLORS['PURPLE'])
         panel.draw.rectangle([21, 9, 24, 12],fill=res.COLORS['PURPLE'])
         panel.draw.rectangle([56, 21, 59, 24],fill=res.COLORS['PURPLE'])
-        panel.draw.text((57,31), "BALLS" ,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
-        panel.draw.text((66, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['YELLOW'])
+        panel.draw.text((57,31), "BALLS" ,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        panel.draw.text((66, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
 
-        panel.draw.text((9,31), "SCORE",font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
+        if self.score <= 500:
+            score_color = res.COLORS['RED']
+        elif self.score <= 1500:
+            score_color = res.COLORS['YELLOW']
+        else:
+            score_color = res.COLORS['GREEN']
+
+        panel.draw.text((9,31), "SCORE",font=res.FONTS['Medium'],fill=score_color)
         score = self.score if self.score > 0 else 0
-        panel.draw.text((12, 41), "%04d" % score,font=res.FONTS['Medium'],fill=res.COLORS['GREEN'])
+        panel.draw.text((12, 41), "%04d" % score,font=res.FONTS['Medium'],fill=score_color)
 
             
 
@@ -117,11 +124,11 @@ class Speedrun(GameMode):
                 panel.draw.text((96-t,1+6*i),num,font=res.FONTS['Tiny'],fill=res.COLORS['RED'])
             panel.draw.text((85,57), "{:02}".format(self.returned_balls),font=res.FONTS['Small'],fill=res.COLORS['ORANGE'])
 
-
-
     def cleanup(self):
-        print("Pausing for 1 seconds")
-        time.sleep(1)
+        self.last_sound.stop()
+        res.TARGET_SFX['COMPLETE'].play()
+        print("Pausing for 2 seconds")
+        time.sleep(2)
         self.persist['last_score'] = self.time_elapsed
         return
 
