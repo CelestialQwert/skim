@@ -39,7 +39,7 @@ class GameOver(State):
         panel.clear()
         panel.draw.text((3, 34), "GAME OVER",font=res.FONTS['MAGMini'],fill=res.COLORS['RED'])
 
-        if self.persist['active_game_mode'] == 'SPEEDRUN':
+        if 'SPEED' in self.persist['active_game_mode']:
             display_time = self.persist['last_score']
 
             minutes = display_time // (60 * res.FPS)

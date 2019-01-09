@@ -3,25 +3,25 @@ from . import resources as res
 import random
 import time
 
-
-class Speedrun(GameMode):
+class Speed100(GameMode):
 
     has_high_scores = True
     intro_text = [
-        "HOW FAST CAN YOU",
-        "SCORE 5000 POINTS?"
+        "TIME FOR A 100%",
+        "RUN... HIT EVERY",
+        "TARGET!"
     ]
 
     def startup(self):
+        self.done = False
         self.last_sound = None
-        self.score = 5000
-        self.score_buffer = 0
-        self.advance_score = False
 
         self.balls = 0
         self.returned_balls = 0
         self.ball_scores = []
         self.countdown_time = 3
+        #The 8 targets are mapped to buttons 2-9
+        self.hit_targets = [1]*2 + [0]*8
         
         self.debug = self.settings['debug']
 
@@ -29,7 +29,7 @@ class Speedrun(GameMode):
         self.timeout = self.settings['timeout']*res.FPS
         self.time_last_ball = self.time_elapsed
 
-        self.persist['active_game_mode'] = 'SPEEDRUN'
+        self.persist['active_game_mode'] = 'SPEED100'
 
     def handle_event(self,event):
         if event.button == res.B.QUIT:
@@ -39,12 +39,15 @@ class Speedrun(GameMode):
         if self.time_elapsed < 0:
             return
         if event.down and event.button in res.POINTS:
-            self.add_score(res.POINTS[event.button])
+            self.hit_targets[event.button.value] += 1
+            self.balls+=1
+            self.time_last_ball = self.time_elapsed
             self.last_sound = res.SOUNDS[event.button.name].play()
         if event.down and event.button == res.B.RETURN:
             self.returned_balls+=1
             if self.returned_balls > self.balls:
-                self.add_score(0)
+                self.hit_targets[9] += 1
+                self.balls+=1
                 res.SOUNDS['MISS'].play()
         
 
@@ -55,26 +58,20 @@ class Speedrun(GameMode):
         elif self.time_elapsed == -res.FPS//4: #the sound clip has a delay so this syncs it up
             res.SOUNDS['GO'].play()
 
-        if self.advance_score:
-            if self.score_buffer > 0:
-                self.score -= 100
-                self.score_buffer -= 100
-        if self.score_buffer == 0:
-            self.advance_score = False
-
         if (self.time_elapsed - self.time_last_ball) > self.timeout:
             self.time_elapsed = 600*res.FPS - 2
-
-        if self.score <= 0:
-            if not self.advance_score:
-                self.manager.next_state = "HIGHSCORE"
-                self.done = True
+        if min(self.hit_targets) > 0:
+            print('this')
+            self.manager.next_state = "HIGHSCORE"
+            self.done = True
         else:
             self.time_elapsed += 1
 
         
 
         if self.time_elapsed >= 599*res.FPS:
+            print('that')
+
             self.manager.next_state = "HIGHSCORE"
             self.done = True
 
@@ -95,19 +92,22 @@ class Speedrun(GameMode):
         panel.draw.rectangle([21, 18, 24, 21],fill=res.COLORS['PURPLE'])
         panel.draw.rectangle([21, 9, 24, 12],fill=res.COLORS['PURPLE'])
         panel.draw.rectangle([56, 21, 59, 24],fill=res.COLORS['PURPLE'])
-        panel.draw.text((57,31), "BALLS" ,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
-        panel.draw.text((66, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
 
-        if self.score <= 500:
-            score_color = res.COLORS['RED']
-        elif self.score <= 1500:
-            score_color = res.COLORS['YELLOW']
-        else:
-            score_color = res.COLORS['GREEN']
+        panel.draw.text((78,31), "B" ,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
+        panel.draw.text((75, 41), "%02d" % self.balls,font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
 
-        panel.draw.text((9,31), "SCORE",font=res.FONTS['Medium'],fill=score_color)
-        score = self.score if self.score > 0 else 0
-        panel.draw.text((12, 41), "%04d" % score,font=res.FONTS['Medium'],fill=score_color)
+        for button in reversed(range(2,10)):
+            if self.hit_targets[button] > 0:
+                score_color = res.COLORS['GREEN']
+            else:
+                score_color = res.COLORS['RED']
+            if button == 9:
+                text = '0'
+            else:
+                text = res.BUTTON(button).name[1:]
+            x = 7 + 19*((9-button)//3)
+            y = 30 + 8*((9-button)%3)
+            panel.draw.text((x,y),text,font=res.FONTS['Small'],fill=score_color)
 
             
 
@@ -119,6 +119,9 @@ class Speedrun(GameMode):
             panel.draw.text((39,54), "GO!",font=res.FONTS['Medium'],fill=res.COLORS['WHITE'])
 
         if self.debug:
+            pass
+
+        if False:
             for i,num in enumerate(self.ball_scores[-9:]):
                 num = str(num)
                 t = 4*len(num)
@@ -138,6 +141,5 @@ class Speedrun(GameMode):
         self.score_buffer += score
         self.ball_scores.append(score)
         self.balls+=1
-        self.advance_score = True
         self.time_last_ball = self.time_elapsed
 
