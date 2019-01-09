@@ -65,6 +65,11 @@ class Speedrun(GameMode):
         if (self.time_elapsed - self.time_last_ball) > self.timeout:
             self.time_elapsed = 600*res.FPS - 2
 
+        if self.manager.sensor.buttons[11] > 0:
+            if self.manager.sensor.buttons[12] > 0:
+                self.time_elapsed = 600*res.FPS - 2
+
+
         if self.score <= 0:
             if not self.advance_score:
                 self.manager.next_state = "HIGHSCORE"

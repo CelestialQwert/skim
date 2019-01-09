@@ -60,8 +60,12 @@ class Speed100(GameMode):
 
         if (self.time_elapsed - self.time_last_ball) > self.timeout:
             self.time_elapsed = 600*res.FPS - 2
+
+        if self.manager.sensor.buttons[11] > 0:
+            if self.manager.sensor.buttons[12] > 0:
+                self.time_elapsed = 600*res.FPS - 2
+
         if min(self.hit_targets) > 0:
-            print('this')
             self.manager.next_state = "HIGHSCORE"
             self.done = True
         else:
