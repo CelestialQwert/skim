@@ -125,7 +125,8 @@ class Speedrun(GameMode):
             panel.draw.text((85,57), "{:02}".format(self.returned_balls),font=res.FONTS['Small'],fill=res.COLORS['ORANGE'])
 
     def cleanup(self):
-        self.last_sound.stop()
+        if self.last_sound:
+            self.last_sound.stop()
         res.TARGET_SFX['COMPLETE'].play()
         print("Pausing for 2 seconds")
         time.sleep(2)

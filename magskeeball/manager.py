@@ -17,6 +17,7 @@ from .target import Target
 from .combo import Combo
 from .speedrun import Speedrun
 from .speed15k import Speed15k
+from .speed10k import Speed10k
 from .battle_royale import BattleRoyale
 from .timed import Timed
 from .dummy import Dummy
@@ -45,6 +46,7 @@ class Manager():
                 "TARGET": Target(manager=self),
                 "COMBO": Combo(manager=self),
                 "SPEEDRUN": Speedrun(manager=self),
+                "SPEED10K": Speed10k(manager=self),
                 "SPEED15K": Speed15k(manager=self),
                 "TIMED": Timed(manager=self),
                 "ROYALE": BattleRoyale(manager=self),
@@ -52,7 +54,7 @@ class Manager():
                 "DEBUG": Debug(manager=self),
                 "GAMEMENU": GameMenu(manager=self),
             }
-            self.game_modes = ['BASIC','SPEEDRUN','SPEED15K','TARGET','COMBO','TIMED','ROYALE']
+            self.game_modes = ['BASIC','SPEEDRUN','SPEED10K','SPEED15K','TARGET','COMBO','TIMED','ROYALE']
             self.selectable_modes = self.game_modes + ['DUMMY','DEBUG','GAMEMENU']
 
             self.has_high_scores = {}
