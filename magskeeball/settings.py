@@ -82,10 +82,10 @@ class Settings(State):
 
     def draw_stats(self,panel):
         panel.clear()
-        panel.draw.text((8,1), 'GAME STATS',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
+        panel.draw.text((23,1), 'GAME STATS',font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
         for i,key in enumerate(self.manager.game_modes):
             alltext = '{:9}{:4d}'.format(key,self.manager.game_log[key])
-            panel.draw.text((6,12+8*i), alltext,font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
+            panel.draw.text((15,12+8*i), alltext,font=res.FONTS['Small'],fill=res.COLORS['WHITE'])
 
     def draw_settings(self,panel):
         panel.clear()

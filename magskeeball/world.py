@@ -3,13 +3,13 @@ from . import resources as res
 import random
 import time
 
-class Speed100(GameMode):
+class World(GameMode):
 
     has_high_scores = True
     intro_text = [
-        "TIME FOR A 100%",
-        "RUN... HIT EVERY",
-        "TARGET!"
+        "AROUND THE WORLD!",
+        "HIT EVERY TARGET",
+        "INCLUDING 0!"
     ]
 
     def startup(self):
@@ -29,7 +29,7 @@ class Speed100(GameMode):
         self.timeout = self.settings['timeout']*res.FPS
         self.time_last_ball = self.time_elapsed
 
-        self.persist['active_game_mode'] = 'SPEED100'
+        self.persist['active_game_mode'] = 'WORLD'
 
     def handle_event(self,event):
         if event.button == res.B.QUIT:
